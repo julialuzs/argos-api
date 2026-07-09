@@ -1,0 +1,6 @@
+@ArgosApi_HostAddress = http://localhost:5095
+
+GET {{ArgosApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
