@@ -3,24 +3,41 @@ using ArgosApi.Domain.Entities;
 
 namespace ArgosApi.Features.Usuarios
 {
-    public class UsuariosService
+    /// <summary>
+    /// Service responsável por gerenciar os usuários
+    /// </summary>
+    public class UsuariosService(AppDbContext context)
     {
-        private readonly AppDbContext _context;
-
-        public UsuariosService(AppDbContext context)
+        /// <summary>
+        /// Cria usuário na base de dados
+        /// </summary>
+        public async Task CriarUsuario(Usuario usuario, CancellationToken cancellationToken)
         {
-            this._context = context;
+            await context.Usuarios.AddAsync(usuario, cancellationToken);
+            await context.SaveChangesAsync();
         }
 
-        public async void CriarUsuario(Usuario usuario, CancellationToken cancellationToken)
+        /// <summary>
+        /// Busca usuário pelo id e altera os dados na base de dados
+        /// </summary>
+        public async Task<Usuario?> EditarUsuario(Usuario usuario, CancellationToken cancellationToken)
         {
-            await _context.Usuarios.AddAsync(usuario, cancellationToken);
-            _context.SaveChanges();
+            var usuarioDb = await context.Usuarios.FindAsync(usuario.Id, cancellationToken); 
+            if (usuarioDb == null)
+            {
+                return null;
+            }
+            usuarioDb = usuario;
+            await context.SaveChangesAsync();
+            return usuarioDb;
         }
 
+        /// <summary>
+        /// Busca usuário pelo id
+        /// </summary>
         public async Task<Usuario?> GetUsuarioPorId(long id, CancellationToken cancellationToken)
         {
-            return await _context.Usuarios.FindAsync(id, cancellationToken);
+            return await context.Usuarios.FindAsync(id, cancellationToken);
         }
 
     }

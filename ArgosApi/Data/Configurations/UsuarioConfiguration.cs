@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ArgosApi.Data.Configurations
 {
-	public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
+    /// <summary>
+    /// Configuração da entidade Usuario para o EF
+    /// </summary>
+    public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
 	{
 		public void Configure(EntityTypeBuilder<Usuario> builder)
 		{

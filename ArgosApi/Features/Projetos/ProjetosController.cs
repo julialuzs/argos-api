@@ -1,34 +1,106 @@
+using ArgosApi.Domain.Entities;
+using ArgosApi.Features.Usuarios;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArgosApi.Features.Projetos
 {
+    /// <summary>
+    /// Controller responsável por gerenciar os projetos
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class ProjetosController : ControllerBase
+    public class ProjetosController(
+        ProjetosService projetosService
+    ) : ControllerBase
     {
-        public ProjetosController(
-            
-        )
+
+        /// <summary>
+        /// Busca o projeto pelo id informado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Projeto</returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Projeto>> GetPorId(
+            [FromRoute] long id, CancellationToken cancellationToken = default)
         {
-            
+            var response = await projetosService.GetProjetoPorId(id, cancellationToken);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
         }
 
-        [HttpGet]
-        public ActionResult<string> Get()
+        /// <summary>
+        /// Busca os projetos pelo id do usuário informado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Projetos</returns>
+        [HttpGet("listar/{id}")]
+        public async Task<ActionResult<List<Projeto>>> ListarProjetosPorIdUsuario(
+            [FromRoute] long id, CancellationToken cancellationToken = default)
         {
-            return "";
+            var response = await projetosService.ListarProjetosPorUsuario(id, cancellationToken);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
         }
 
+        /// <summary>
+        /// Cria o projeto 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult<string> Post([FromBody] string value)
+        public async Task<ActionResult> CriarProjeto([FromBody] CriacaoProjetoRequest request, CancellationToken cancellationToken = default)
         {
-            return "";
+            await projetosService.CriarProjeto(request, cancellationToken);
+            return Ok();
         }
 
+        /// <summary>
+        /// Altera informações do projeto 
+        /// </summary>
+        /// <param name="id"></param
+        /// <param name="projeto"></param>
+        /// <param name="cancellationToken"></param>
         [HttpPut("{id}")]
-        public ActionResult<string> Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(
+            [FromRoute] int id,
+            [FromBody] Projeto projeto)
         {
-            return "";
+            projeto.Id = id;
+            var response = await projetosService.EditarProjeto(projeto);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
+
+        /// <summary>
+        /// Vincular usuário no projeto 
+        /// </summary>
+        /// <param name="id">id do projeto</param>
+        /// <param name="idUsuario"></param>
+        /// <param name="cancellationToken"></param>
+        [HttpPut("{id}/vincular-usuario/{idUsuario}")]
+        public async Task<ActionResult> VincularUsuarioNoProjeto(
+            [FromRoute] int id,
+            [FromRoute] int idUsuario, 
+            CancellationToken cancellationToken = default)
+        { 
+            var response = await projetosService.VincularUsuarioNoProjeto(id, idUsuario, cancellationToken);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok();
         }
 
         [HttpDelete("{id}")]

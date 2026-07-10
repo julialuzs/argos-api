@@ -1,10 +1,12 @@
 namespace ArgosApi.Domain.Entities
 {
+    /// <summary>
+    /// Relatório
+    /// </summary>
     public class Relatorio : BaseEntity
     {
-        public string Nome { get; set; } = "";
         public required long ProjetoId { get; set; }
-        public required Projeto Projeto { get; set; }
+        public Projeto Projeto { get; set; }
         public DateTime DataHoraExecucao { get; set; }
         public int Pontuacao { get; set; }
         public string Json { get; set; } = "";

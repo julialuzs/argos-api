@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ArgosApi.Data.Configurations
 {
+    /// <summary>
+    /// Configuração da entidade Projeto para o EF
+    /// </summary>
     public class ProjetoConfiguration : IEntityTypeConfiguration<Projeto>
     {
         public void Configure(EntityTypeBuilder<Projeto> builder)
@@ -13,8 +16,11 @@ namespace ArgosApi.Data.Configurations
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Nome)
-                .HasMaxLength(150)
+                .HasMaxLength(100)
                 .IsRequired();
+
+            builder.Property(p => p.Descricao)
+                .HasMaxLength(250);
 
             builder
                 .HasMany(p => p.Relatorios)
