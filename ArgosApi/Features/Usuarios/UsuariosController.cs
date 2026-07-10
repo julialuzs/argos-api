@@ -1,3 +1,4 @@
+using ArgosApi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArgosApi.Features.Usuarios
@@ -6,16 +7,42 @@ namespace ArgosApi.Features.Usuarios
     [Route("[controller]")]
     public class UsuariosController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<string> Get()
+        private readonly UsuariosService _usuariosService;
+        public UsuariosController(
+            UsuariosService usuariosService
+        )
         {
-            return "";
+            this._usuariosService = usuariosService;
         }
 
-        [HttpPost]
-        public ActionResult<string> Post([FromBody] string value)
+        /// <summary>
+        /// Busca o usuário pelo id informado
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Usuario</returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Usuario>> GetPorId([FromRoute] long id, CancellationToken cancellationToken = default)
         {
-            return "";
+            var response = await _usuariosService.GetUsuarioPorId(id, cancellationToken);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Cria o usuário 
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Usuario</returns>
+        [HttpPost]
+        public ActionResult<string> Post([FromBody] Usuario usuario, CancellationToken cancellationToken = default)
+        {
+            _usuariosService.CriarUsuario(usuario, cancellationToken);
+            return Ok();
         }
 
         [HttpPut("{id}")]

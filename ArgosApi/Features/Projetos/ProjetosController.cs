@@ -6,6 +6,13 @@ namespace ArgosApi.Features.Projetos
     [Route("[controller]")]
     public class ProjetosController : ControllerBase
     {
+        public ProjetosController(
+            
+        )
+        {
+            
+        }
+
         [HttpGet]
         public ActionResult<string> Get()
         {

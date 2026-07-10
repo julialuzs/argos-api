@@ -8,7 +8,7 @@ namespace ArgosApi.Data.Configurations
 	{
 		public void Configure(EntityTypeBuilder<Usuario> builder)
 		{
-			builder.ToTable("Usuario");
+			builder.ToTable("usuario");
 
 			builder.HasKey(p => p.Id);
 

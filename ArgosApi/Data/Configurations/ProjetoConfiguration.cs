@@ -8,7 +8,7 @@ namespace ArgosApi.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Projeto> builder)
         {
-            builder.ToTable("Projeto");
+            builder.ToTable("projeto");
 
             builder.HasKey(p => p.Id);
 
@@ -25,7 +25,7 @@ namespace ArgosApi.Data.Configurations
             builder
                 .HasMany(p => p.Usuarios)
                 .WithMany(u => u.Projetos)
-                .UsingEntity(j => j.ToTable("ProjetoUsuario"));
+                .UsingEntity(j => j.ToTable("projeto_usuario"));
         }
     }
 }

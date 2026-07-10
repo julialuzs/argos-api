@@ -8,12 +8,12 @@ namespace ArgosApi.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Relatorio> builder)
         {
-            builder.ToTable("Relatorio");
+            builder.ToTable("relatorio");
 
             builder.HasKey(r => r.Id);
 
             builder.Property(r => r.Json)
-                .HasColumnType("nvarchar(max)")
+                .HasColumnType("jsonb")
                 .IsRequired();
 
             builder.Property(r => r.Pontuacao)
