@@ -1,4 +1,5 @@
 using ArgosApi.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArgosApi.Features.Relatorios
@@ -19,6 +20,7 @@ namespace ArgosApi.Features.Relatorios
         /// <param name="cancellationToken"></param>
         /// <returns>Projeto</returns>
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Projeto>> GetPorId(
             [FromRoute] long id, CancellationToken cancellationToken = default)
         {
@@ -37,6 +39,7 @@ namespace ArgosApi.Features.Relatorios
         /// <param name="cancellationToken"></param>
         /// <returns>Projetos</returns>
         [HttpGet("listar/{id}")]
+        [Authorize]
         public async Task<ActionResult<List<Relatorio>>> ListarRelatoriosPorProjeto(
             [FromRoute] long id, CancellationToken cancellationToken = default)
         {
@@ -55,6 +58,7 @@ namespace ArgosApi.Features.Relatorios
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> SalvarRelatorio([FromBody] RelatorioRequest request, CancellationToken cancellationToken = default)
         {
             await relatoriosService.SalvarRelatorio(request, cancellationToken);

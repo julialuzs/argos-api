@@ -1,13 +1,12 @@
+using ArgosApi.Features.Authentication;
 using ArgosApi.Features.Projetos;
 using ArgosApi.Features.Relatorios;
 using ArgosApi.Features.Usuarios;
+using ArgosApi.Infrastructure.Authentication;
 
 namespace ArgosApi.Common.Extensions
 {
-    /// <summary>
-    /// Collection de services
-    /// </summary>
-    public static class ServiceCollectionExtensions
+    public static class ApplicationExtensions
     {
         public static IServiceCollection AddApplicationServices(
             this IServiceCollection services)
@@ -16,6 +15,8 @@ namespace ArgosApi.Common.Extensions
             services.AddScoped<RelatoriosService>();
             //services.AddScoped<DashboardService>();
             services.AddScoped<UsuariosService>();
+            services.AddScoped<AuthService>();
+            services.AddScoped<JwtService>();
 
             return services;
         }

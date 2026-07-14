@@ -1,29 +1,17 @@
 using ArgosApi.Common.Extensions;
 using ArgosApi.Data;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using ArgosApi.Infrastructure.Authentication;
+using ArgosApi.Infrastructure.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-    options.IncludeXmlComments(xmlPath);
-});
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-    options.UseSnakeCaseNamingConvention();
-});
-
-builder.Services.AddApplicationServices();
+builder.Services
+    .AddApplicationServices()
+    .AddSwaggerDocumentation()
+    .AddDatabaseConfiguration(builder.Configuration)
+    .AddAuthenticationServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -40,6 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

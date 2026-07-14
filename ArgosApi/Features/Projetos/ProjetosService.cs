@@ -45,7 +45,7 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Busca projeto pelo id e o altera na base de dados
         /// </summary>
-        public async Task<Projeto?> EditarProjeto(Projeto projeto)
+        public async Task<Projeto?> EditarProjeto(Projeto projeto, CancellationToken cancellationToken)
         {
             var entity = await context.Projetos.FindAsync(projeto.Id);
             if (entity == null)
@@ -53,7 +53,7 @@ namespace ArgosApi.Features.Projetos
                 return null;
             }
             entity = projeto;
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
             return entity;
         }
 

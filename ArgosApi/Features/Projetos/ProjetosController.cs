@@ -1,5 +1,5 @@
 using ArgosApi.Domain.Entities;
-using ArgosApi.Features.Usuarios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArgosApi.Features.Projetos
@@ -13,7 +13,6 @@ namespace ArgosApi.Features.Projetos
         ProjetosService projetosService
     ) : ControllerBase
     {
-
         /// <summary>
         /// Busca o projeto pelo id informado
         /// </summary>
@@ -21,6 +20,7 @@ namespace ArgosApi.Features.Projetos
         /// <param name="cancellationToken"></param>
         /// <returns>Projeto</returns>
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Projeto>> GetPorId(
             [FromRoute] long id, CancellationToken cancellationToken = default)
         {
@@ -39,6 +39,7 @@ namespace ArgosApi.Features.Projetos
         /// <param name="cancellationToken"></param>
         /// <returns>Projetos</returns>
         [HttpGet("listar/{id}")]
+        [Authorize]
         public async Task<ActionResult<List<Projeto>>> ListarProjetosPorIdUsuario(
             [FromRoute] long id, CancellationToken cancellationToken = default)
         {
@@ -57,6 +58,7 @@ namespace ArgosApi.Features.Projetos
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CriarProjeto([FromBody] CriacaoProjetoRequest request, CancellationToken cancellationToken = default)
         {
             await projetosService.CriarProjeto(request, cancellationToken);
@@ -66,16 +68,18 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Altera informações do projeto 
         /// </summary>
-        /// <param name="id"></param
+        /// <param name="id"></param>
         /// <param name="projeto"></param>
         /// <param name="cancellationToken"></param>
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> Put(
             [FromRoute] int id,
-            [FromBody] Projeto projeto)
+            [FromBody] Projeto projeto,
+            CancellationToken cancellationToken = default)
         {
             projeto.Id = id;
-            var response = await projetosService.EditarProjeto(projeto);
+            var response = await projetosService.EditarProjeto(projeto, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -90,6 +94,7 @@ namespace ArgosApi.Features.Projetos
         /// <param name="idUsuario"></param>
         /// <param name="cancellationToken"></param>
         [HttpPut("{id}/vincular-usuario/{idUsuario}")]
+        [Authorize]
         public async Task<ActionResult> VincularUsuarioNoProjeto(
             [FromRoute] int id,
             [FromRoute] int idUsuario, 
@@ -104,6 +109,7 @@ namespace ArgosApi.Features.Projetos
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public ActionResult<string> Delete(int id)
         {
             return "";

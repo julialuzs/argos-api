@@ -1,4 +1,5 @@
 using ArgosApi.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArgosApi.Features.Usuarios
@@ -19,6 +20,7 @@ namespace ArgosApi.Features.Usuarios
         /// <param name="cancellationToken"></param>
         /// <returns>Usuario</returns>
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Usuario>> GetPorId(
             [FromRoute] long id, CancellationToken cancellationToken = default)
         {
@@ -31,13 +33,14 @@ namespace ArgosApi.Features.Usuarios
         }
 
         /// <summary>
-        /// Cria o usuário 
+        /// Cria o usuário
         /// </summary>
         /// <param name="usuario"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>Usuario</returns>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Usuario usuario, CancellationToken cancellationToken = default)
+        [AllowAnonymous]
+        public async Task<ActionResult> CriarUsuario([FromBody] CriacaoUsuarioRequest usuario, CancellationToken cancellationToken = default)
         {
             await usuariosService.CriarUsuario(usuario, cancellationToken);
             return Ok();
@@ -49,13 +52,14 @@ namespace ArgosApi.Features.Usuarios
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(
+        [Authorize]
+        public async Task<ActionResult> AlterarUsuario(
             [FromRoute] int id, 
             [FromBody] Usuario usuario, 
             CancellationToken cancellationToken = default)
         {
             usuario.Id = id;
-            var response = await usuariosService.EditarUsuario(usuario, cancellationToken); 
+            var response = await usuariosService.AlterarUsuario(usuario, cancellationToken); 
             if (response == null)
             {
                 return NotFound();
@@ -69,6 +73,7 @@ namespace ArgosApi.Features.Usuarios
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken = default)
         {
             // implementar soft delete
