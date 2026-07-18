@@ -11,7 +11,16 @@ builder.Services
     .AddApplicationServices()
     .AddSwaggerDocumentation()
     .AddDatabaseConfiguration(builder.Configuration)
-    .AddAuthenticationServices(builder.Configuration);
+    .AddAuthenticationServices(builder.Configuration)
+    .AddCors(options =>
+    {
+        options.AddPolicy("AllowSpecificOrigin", policy =>
+        {
+            policy.WithOrigins("http://localhost:4200", "https://seusite.com")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+    });
 
 var app = builder.Build();
 
@@ -27,6 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthentication();
 app.UseAuthorization();

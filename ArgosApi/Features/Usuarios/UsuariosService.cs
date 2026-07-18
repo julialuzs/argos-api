@@ -1,5 +1,6 @@
 using ArgosApi.Data;
 using ArgosApi.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArgosApi.Features.Usuarios
 {
@@ -13,6 +14,12 @@ namespace ArgosApi.Features.Usuarios
         /// </summary>
         public async Task CriarUsuario(CriacaoUsuarioRequest request, CancellationToken cancellationToken)
         {
+            var usuarioExistenteNoBanco = await context.Usuarios.FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+            
+            if (usuarioExistenteNoBanco != null)
+            {
+                throw new Exception("E-mail já cadastrado na aplicação");
+            }
             var hash = BCrypt.Net.BCrypt.HashPassword(request.Senha);
 
             Usuario usuario = new()
