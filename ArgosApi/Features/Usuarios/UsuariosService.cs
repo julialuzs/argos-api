@@ -7,8 +7,36 @@ namespace ArgosApi.Features.Usuarios
     /// <summary>
     /// Service responsável por gerenciar os usuários
     /// </summary>
-    public class UsuariosService(AppDbContext context)
-    {
+    public class UsuariosService(AppDbContext context, CurrentUser currentUser)
+    { 
+
+        /// <summary>
+        /// Busca usuário pelo id
+        /// </summary>
+        public async Task<Usuario?> GetUsuarioPorId(long id, CancellationToken cancellationToken)
+        {
+            return await context.Usuarios.FindAsync([id], cancellationToken: cancellationToken);
+        }
+
+        /// <summary>
+        /// Busca usuário logado pelo token de autenticação
+        /// </summary>
+        public async Task<UsuarioResponse> GetUsuarioLogado(CancellationToken cancellationToken = default)
+        {
+            var id = currentUser.Id;
+            var usuarioLogado = await GetUsuarioPorId(id, cancellationToken);
+            if (usuarioLogado == null)  {
+                return null;
+            }
+            return new UsuarioResponse
+            {
+                Nome = usuarioLogado.Nome,
+                Email = usuarioLogado.Email,
+                ProjetoSelecionado = usuarioLogado.Projetos.FirstOrDefault(),
+                Projetos = usuarioLogado.Projetos
+            };
+        }
+
         /// <summary>
         /// Cria usuário na base de dados
         /// </summary>
@@ -48,13 +76,7 @@ namespace ArgosApi.Features.Usuarios
             return usuarioDb;
         }
 
-        /// <summary>
-        /// Busca usuário pelo id
-        /// </summary>
-        public async Task<Usuario?> GetUsuarioPorId(long id, CancellationToken cancellationToken)
-        {
-            return await context.Usuarios.FindAsync([id], cancellationToken: cancellationToken);
-        }
+       
 
     }
 }

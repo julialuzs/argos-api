@@ -17,6 +17,7 @@ namespace ArgosApi.Common.Extensions
             services.AddScoped<UsuariosService>();
             services.AddScoped<AuthService>();
             services.AddScoped<JwtService>();
+            services.AddScoped<CurrentUser>();
 
             return services;
         }

@@ -13,9 +13,6 @@ namespace ArgosApi.Features.Projetos
         /// Descrição do projeto
         /// </summary>
         public string Descricao { get; set; } = string.Empty;
-        /// <summary>
-        /// Usuario criador do projeto
-        /// </summary>
-        public long IdUsuario { get; set; }
+         
     }
 }

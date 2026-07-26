@@ -35,6 +35,24 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Busca os projetos pelo id do usuário informado
         /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Projetos</returns>
+        [HttpGet("listar")]
+        [Authorize]
+        public async Task<ActionResult<List<Projeto>>> ListarProjetosPorUsuarioLogado(
+            CancellationToken cancellationToken = default)
+        {
+            var response = await projetosService.ListarProjetosPorUsuarioLogado(cancellationToken);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Busca os projetos pelo id do usuário informado
+        /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>Projetos</returns>

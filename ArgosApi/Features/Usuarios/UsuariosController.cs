@@ -33,6 +33,23 @@ namespace ArgosApi.Features.Usuarios
         }
 
         /// <summary>
+        /// Busca o usuário logado através dos dados do token de autenticação
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Usuario</returns>
+        [HttpGet("logado")]
+        [Authorize]
+        public async Task<ActionResult<Usuario>> GetUsuarioLogado(CancellationToken cancellationToken = default)
+        {
+            var response = await usuariosService.GetUsuarioLogado(cancellationToken);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Cria o usuário
         /// </summary>
         /// <param name="usuario"></param>

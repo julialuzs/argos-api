@@ -1,5 +1,6 @@
 using ArgosApi.Data;
 using ArgosApi.Domain.Entities;
+using ArgosApi.Features.Usuarios;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArgosApi.Features.Projetos
@@ -7,7 +8,7 @@ namespace ArgosApi.Features.Projetos
     /// <summary>
     /// Service responsável por gerenciar os projetos
     /// </summary>
-    public class ProjetosService(AppDbContext context)
+    public class ProjetosService(AppDbContext context, CurrentUser currentUser)
     { 
         /// <summary>
         /// Busca projeto pelo id
@@ -29,17 +30,33 @@ namespace ArgosApi.Features.Projetos
         }
 
         /// <summary>
+        /// Busca todos os projeto pelo usuário logado
+        /// </summary>
+        public async Task<List<Projeto>> ListarProjetosPorUsuarioLogado( CancellationToken cancellationToken)
+        { 
+            return context.Projetos.Where((projeto) =>
+                projeto.Usuarios
+                    .Select(u => u.Id)
+                    .Contains(currentUser.Id)).ToList() ?? [];
+        }
+
+        /// <summary>
         /// Cria projeto na base de dados
         /// </summary>
         public async Task CriarProjeto(CriacaoProjetoRequest projeto, CancellationToken cancellationToken)
         {
-            await context.Projetos.AddAsync(new Projeto
+            var usuario = await context.Usuarios.FindAsync(currentUser.Id, cancellationToken);
+
+            var novoProjeto = new Projeto
             {
                 Nome = projeto.Nome,
                 Descricao = projeto.Descricao,
-                Usuarios = [new Usuario { Id = projeto.IdUsuario }]
-            }, cancellationToken);
-            await context.SaveChangesAsync();
+            };
+
+            novoProjeto.Usuarios.Add(usuario);
+
+            await context.Projetos.AddAsync(novoProjeto, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         /// <summary>

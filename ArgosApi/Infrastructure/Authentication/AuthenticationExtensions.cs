@@ -1,7 +1,4 @@
-﻿using ArgosApi.Features.Projetos;
-using ArgosApi.Features.Relatorios;
-using ArgosApi.Features.Usuarios;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -40,7 +37,6 @@ namespace ArgosApi.Infrastructure.Authentication
                             Encoding.UTF8.GetBytes(jwtOptions.Key))
                     };
                 });
-            //services.AddAuthorization();
 
             return services;
         }

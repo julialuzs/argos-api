@@ -15,7 +15,7 @@ namespace ArgosApi.Features.Authentication
                     x => x.Email == request.Email,
                     cancellationToken);
 
-            if (usuario is null || !BCrypt.Net.BCrypt.Verify(request.Senha, usuario.SenhaHash))
+            if (usuario is null)
                 throw new AuthenticationException("Usuário ou senha inválidos.");
 
             var senhaValida = BCrypt.Net.BCrypt.Verify(
