@@ -19,10 +19,11 @@ namespace ArgosApi.Features.Relatorios
         /// <summary>
         /// Busca todos os relatorios pelo id do projeto
         /// </summary>
-        public async Task<List<Relatorio>> ListarRelatoriosPorProjeto(long idProjeto, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Relatorio>> ListarRelatoriosPorProjeto(long idProjeto, CancellationToken cancellationToken)
         {
-            return context.Relatorios.Where((relatorio) =>
-                relatorio.ProjetoId == idProjeto).ToList() ?? [];
+            return context.Relatorios
+                .Where((relatorio) => relatorio.ProjetoId == idProjeto)
+                .OrderBy(r => r.DataHoraExecucao);
         }
 
         /// <summary>

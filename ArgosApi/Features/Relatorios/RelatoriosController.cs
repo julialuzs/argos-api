@@ -16,15 +16,16 @@ namespace ArgosApi.Features.Relatorios
         /// <summary>
         /// Busca o relatorio pelo id informado
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="idProjeto"></param>
+        /// <param name="idRelatorio"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>Projeto</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{idProjeto}/{idRelatorio}")]
         [Authorize]
         public async Task<ActionResult<Projeto>> GetPorId(
-            [FromRoute] long id, CancellationToken cancellationToken = default)
+            [FromRoute] long idProjeto, [FromRoute] long idRelatorio, CancellationToken cancellationToken = default)
         {
-            var response = await relatoriosService.GetRelatorioPorId(id, cancellationToken);
+            var response = await relatoriosService.GetRelatorioPorId(idRelatorio, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -35,15 +36,15 @@ namespace ArgosApi.Features.Relatorios
         /// <summary>
         /// Busca os relatorios pelo id do projeto informado
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="idProjeto"></param>
         /// <param name="cancellationToken"></param>
         /// <returns>Projetos</returns>
-        [HttpGet("listar/{id}")]
+        [HttpGet("{idProjeto}/listar")]
         [Authorize]
         public async Task<ActionResult<List<Relatorio>>> ListarRelatoriosPorProjeto(
-            [FromRoute] long id, CancellationToken cancellationToken = default)
+            [FromRoute] long idProjeto, CancellationToken cancellationToken = default)
         {
-            var response = await relatoriosService.ListarRelatoriosPorProjeto(id, cancellationToken);
+            var response = await relatoriosService.ListarRelatoriosPorProjeto(idProjeto, cancellationToken);
             if (response == null)
             {
                 return NotFound();
