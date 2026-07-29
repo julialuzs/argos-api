@@ -22,7 +22,7 @@ namespace ArgosApi.Features.Relatorios
         /// <returns>Projeto</returns>
         [HttpGet("{idProjeto}/{idRelatorio}")]
         [Authorize]
-        public async Task<ActionResult<Projeto>> GetPorId(
+        public async Task<ActionResult<RelatorioDetalheResponse>> GetPorId(
             [FromRoute] long idProjeto, [FromRoute] long idRelatorio, CancellationToken cancellationToken = default)
         {
             var response = await relatoriosService.GetRelatorioPorId(idRelatorio, cancellationToken);
