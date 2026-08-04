@@ -2,6 +2,8 @@ using System.Text.Json;
 using ArgosApi.Data;
 using ArgosApi.Domain.Entities;
 using ArgosApi.Features.Relatorios.Helpers;
+using ArgosApi.Features.Relatorios.Requests;
+using ArgosApi.Features.Relatorios.Responses;
 
 namespace ArgosApi.Features.Relatorios
 {
@@ -44,7 +46,19 @@ namespace ArgosApi.Features.Relatorios
         public async Task SalvarRelatorio(RelatorioRequest request, CancellationToken cancellationToken)
         {
             var jsonText = request.Json.GetRawText();
-            var auditoria = JsonSerializer.Deserialize<RelatorioAuditoriaJson>(jsonText, JsonOptions);
+            RelatorioAuditoriaJson auditoria;
+
+            try
+            {
+                auditoria = JsonSerializer.Deserialize<RelatorioAuditoriaJson>(jsonText, JsonOptions)
+                    ?? throw new JsonException("JSON do relatório é nulo.");
+            }
+            catch (JsonException ex)
+            {
+                throw new RelatorioJsonInvalidoException(
+                    $"O JSON do relatório não pôde ser processado. Path: {ex.Path ?? "(desconhecido)"}. Detalhe: {ex.Message}",
+                    ex);
+            }
 
             var relatorio = new Relatorio
             {
@@ -52,9 +66,9 @@ namespace ArgosApi.Features.Relatorios
                 ProjetoId = request.IdProjeto,
                 DataHoraExecucao = auditoria?.AuditDate ?? DateTime.UtcNow,
                 Pontuacao = RelatorioAuditoriaCalculator.CalcularPontuacao(auditoria),
-                TradutorLibrasIdentificado = auditoria?.AssistiveTechnologies?.VLibras ?? false,
-                QuantidadeErros = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, "serious", "critical"),
-                QuantidadeAvisos = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, "moderate", "minor")
+                TradutorLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
+                QuantidadeErros = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Serious, SeveridadeEnum.Critical),
+                QuantidadeAvisos = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Moderate, SeveridadeEnum.Minor)
             };
 
             await context.Relatorios.AddAsync(relatorio, cancellationToken);

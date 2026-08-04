@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace ArgosApi.Features.Relatorios
+namespace ArgosApi.Features.Relatorios.Requests
 {
     /// <summary>
     /// Request para criação de relatório

@@ -1,5 +1,7 @@
 using System.Text.Json;
 using ArgosApi.Domain.Entities;
+using ArgosApi.Features.Relatorios.Requests;
+using ArgosApi.Features.Relatorios.Responses;
 
 namespace ArgosApi.Features.Relatorios.Helpers
 {
@@ -23,11 +25,11 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 DataHoraExecucao = relatorio.DataHoraExecucao,
                 Pontuacao = relatorio.Pontuacao,
                 TradutorLibrasIdentificado = relatorio.TradutorLibrasIdentificado,
-                HandTalkIdentificado = auditoria?.AssistiveTechnologies?.HandTalk ?? false,
+                HandTalkIdentificado = auditoria?.Summary.AssistiveTechnologies?.HandTalk ?? false,
                 QuantidadeErros = relatorio.QuantidadeErros,
                 QuantidadeAvisos = relatorio.QuantidadeAvisos,
-                RotasAuditadas = auditoria?.RoutesAudited ?? auditoria?.Results.Count ?? 0,
-                FluxosAuditados = auditoria?.FlowsAudited ?? 0,
+                RotasAuditadas = auditoria?.Summary.RoutesAudited ?? auditoria?.Results.Count ?? 0,
+                FluxosAuditados = auditoria?.Summary.FlowsAudited ?? 0,
                 Resultados = MapearResultados(auditoria)
             };
         }
@@ -46,20 +48,18 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 Pontuacao = resultado.Score,
                 ProblemasCriticos = resultado.CriticalIssues,
                 CriteriosEmagMapeados = resultado.EmagMappings,
-                Apontamentos = resultado.Findings.Select(MapearApontamento).ToList()
+                Apontamentos = [.. resultado.Findings.Select(MapearApontamento)]
             }).ToList();
         }
        
         public static ApontamentoResponse MapearApontamento(ApontamentoJson apontamento)
-        {
-            var severidade = apontamento.Severity ?? apontamento.Impact ?? string.Empty;
-
+        { 
             return new ApontamentoResponse
             {
                 Id = apontamento.Id ?? string.Empty,
                 Titulo = apontamento.Title ?? string.Empty,
-                Severidade = severidade,
-                Tipo = ObterTipoApontamento(severidade),
+                Severidade = apontamento.Severity.ToDisplayName(),
+                Tipo = ObterTipoApontamento(apontamento.Severity),
                 Fonte = apontamento.Source ?? string.Empty,
                 Descricao = apontamento.Description ?? string.Empty,
                 CriteriosEmag = apontamento.EmagCriteria,
@@ -71,8 +71,8 @@ namespace ArgosApi.Features.Relatorios.Helpers
             };
         }
 
-        public static string ObterTipoApontamento(string severidade) =>
-            severidade is "serious" or "critical" ? "erro" : "aviso";
+        public static string ObterTipoApontamento(SeveridadeEnum severidade) =>
+            severidade is SeveridadeEnum.Serious or SeveridadeEnum.Critical ? "erro" : "aviso";
 
     }
 }

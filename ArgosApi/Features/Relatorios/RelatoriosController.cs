@@ -1,4 +1,7 @@
+using System.Text.Json;
 using ArgosApi.Domain.Entities;
+using ArgosApi.Features.Relatorios.Requests;
+using ArgosApi.Features.Relatorios.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,8 +65,23 @@ namespace ArgosApi.Features.Relatorios
         [Authorize]
         public async Task<ActionResult> SalvarRelatorio([FromBody] RelatorioRequest request, CancellationToken cancellationToken = default)
         {
-            await relatoriosService.SalvarRelatorio(request, cancellationToken);
-            return Ok();
+            try
+            {
+                await relatoriosService.SalvarRelatorio(request, cancellationToken);
+                return Ok();
+            }
+            catch (RelatorioJsonInvalidoException ex)
+            {
+                var jsonEx = ex.InnerException as JsonException;
+                return UnprocessableEntity(new
+                {
+                    message = ex.Message,
+                    detail = jsonEx?.Message,
+                    path = jsonEx?.Path,
+                    line = jsonEx?.LineNumber,
+                    position = jsonEx?.BytePositionInLine
+                });
+            }
         }
     }
 }

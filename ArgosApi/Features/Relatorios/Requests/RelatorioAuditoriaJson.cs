@@ -1,10 +1,15 @@
-namespace ArgosApi.Features.Relatorios
+namespace ArgosApi.Features.Relatorios.Requests
 {
     /// <summary>
     /// Estrutura do JSON retornado pelo avaliador de acessibilidade
     /// </summary>
     public class RelatorioAuditoriaJson
     {
+        /// <summary>
+        /// Resumo da auditoria
+        /// </summary>
+        public SummaryJson Summary { get; set; }
+        
         // TODO: melhorar json para que ele não tenha nomes em ingles
         /// <summary>
         /// Resultados por rota auditada
@@ -12,9 +17,26 @@ namespace ArgosApi.Features.Relatorios
         public List<ResultadoAuditoriaJson> Results { get; set; } = [];
 
         /// <summary>
-        /// Data em que a auditoria foi executada
+        /// Pontuação
+        /// </summary>
+        public int Score { get; set; } = 0;
+
+        /// <summary>
+        /// Duração da execução da auditoria em milissegundos
+        /// </summary>
+        public long DurationMs { get; set; }
+
+        /// <summary>
+        /// Data/hora em que a auditoria foi executada
         /// </summary>
         public DateTime? AuditDate { get; set; }
+    }
+
+    public class SummaryJson
+    {
+        public int Score { get; set; }
+
+        public Dictionary<SeveridadeEnum, int> BySeverity { get; set; }
 
         /// <summary>
         /// Quantidade de fluxos auditados
@@ -27,6 +49,11 @@ namespace ArgosApi.Features.Relatorios
         public int RoutesAudited { get; set; }
 
         /// <summary>
+        /// Quantidade de apontamentos
+        /// </summary>
+        public int TotalFindings { get; set; }
+
+        /// <summary>
         /// Tecnologias assistivas identificadas no site
         /// </summary>
         public TecnologiasAssistivasJson? AssistiveTechnologies { get; set; }
@@ -35,7 +62,7 @@ namespace ArgosApi.Features.Relatorios
     /// <summary>
     /// Resultado da auditoria de uma rota
     /// </summary>
-    public class ResultadoAuditoriaJson
+    public class ResultadoAuditoriaJson 
     {
         /// <summary>
         /// URL auditada
@@ -84,14 +111,9 @@ namespace ArgosApi.Features.Relatorios
         public string? Title { get; set; }
 
         /// <summary>
-        /// Severidade do apontamento
+        /// Severidade do apontamento.
         /// </summary>
-        public string? Severity { get; set; }
-
-        /// <summary>
-        /// Impacto do apontamento
-        /// </summary>
-        public string? Impact { get; set; }
+        public SeveridadeEnum Severity { get; set; }
 
         /// <summary>
         /// Ferramenta que originou o apontamento

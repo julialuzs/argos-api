@@ -1,4 +1,4 @@
-namespace ArgosApi.Features.Relatorios
+namespace ArgosApi.Features.Relatorios.Responses
 {
     /// <summary>
     /// Resposta detalhada de um relatório com apontamentos já tratados

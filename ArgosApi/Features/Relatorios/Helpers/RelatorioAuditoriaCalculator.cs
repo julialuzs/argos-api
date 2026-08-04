@@ -1,3 +1,5 @@
+using ArgosApi.Features.Relatorios.Requests;
+
 namespace ArgosApi.Features.Relatorios.Helpers
 {
     /// <summary>
@@ -17,7 +19,7 @@ namespace ArgosApi.Features.Relatorios.Helpers
 
         public static int ContarApontamentosPorSeveridade(
             RelatorioAuditoriaJson? auditoria,
-            params string[] severidades)
+            params SeveridadeEnum[] severidades)
         {
             if (auditoria?.Results is not { Count: > 0 })
             {
@@ -27,9 +29,8 @@ namespace ArgosApi.Features.Relatorios.Helpers
             return auditoria.Results
                 .SelectMany(resultado => resultado.Findings)
                 .Count(finding =>
-                {
-                    var nivel = finding.Severity ?? finding.Impact ?? string.Empty;
-                    return severidades.Contains(nivel, StringComparer.OrdinalIgnoreCase);
+                { 
+                    return severidades.Contains(finding.Severity);
                 });
         }
     }
