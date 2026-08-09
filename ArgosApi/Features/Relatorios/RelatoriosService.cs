@@ -71,6 +71,9 @@ namespace ArgosApi.Features.Relatorios
                 QuantidadeAvisos = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Moderate, SeveridadeEnum.Minor)
             };
 
+            var projeto = await context.Projetos.FindAsync(request.IdProjeto, cancellationToken);
+            projeto!.UltimaExecucao = relatorio.DataHoraExecucao;
+
             await context.Relatorios.AddAsync(relatorio, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
         }

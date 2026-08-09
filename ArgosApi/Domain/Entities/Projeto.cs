@@ -3,7 +3,10 @@ namespace ArgosApi.Domain.Entities
     public class Projeto : BaseEntity
     {
         public string Nome { get; set; } = "";
+
         public string Descricao { get; set; } = "";
+
+        public DateTime UltimaExecucao { get; set; }
 
         public ICollection<Usuario> Usuarios { get; set; } = [];
 

@@ -32,8 +32,8 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Busca todos os projeto pelo usuário logado
         /// </summary>
-        public async Task<List<Projeto>> ListarProjetosPorUsuarioLogado( CancellationToken cancellationToken)
-        { 
+        public async Task<List<Projeto>> ListarProjetosPorUsuarioLogado(CancellationToken cancellationToken)
+        {
             return context.Projetos.Where((projeto) =>
                 projeto.Usuarios
                     .Select(u => u.Id)
