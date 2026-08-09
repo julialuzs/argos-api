@@ -62,7 +62,7 @@ namespace ArgosApi.Features.Relatorios
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult> SalvarRelatorio([FromBody] RelatorioRequest request, CancellationToken cancellationToken = default)
         {
             try
