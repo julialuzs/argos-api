@@ -65,7 +65,7 @@ namespace ArgosApi.Features.Relatorios
                 Json = jsonText,
                 ProjetoId = request.IdProjeto,
                 DataHoraExecucao = auditoria?.AuditDate ?? DateTime.UtcNow,
-                Pontuacao = RelatorioAuditoriaCalculator.CalcularPontuacao(auditoria),
+                Pontuacao = auditoria?.Summary?.Score ?? 0,
                 TradutorLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
                 QuantidadeErros = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Serious, SeveridadeEnum.Critical),
                 QuantidadeAvisos = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Moderate, SeveridadeEnum.Minor)
