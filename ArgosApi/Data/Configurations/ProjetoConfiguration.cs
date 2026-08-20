@@ -23,7 +23,8 @@ namespace ArgosApi.Data.Configurations
                 .HasMaxLength(250)
                 .IsRequired();
 
-            builder.Property(p => p.UltimaExecucao);
+            builder.Property(p => p.UltimaExecucao)
+                .IsRequired(false);
 
             builder
                 .HasMany(p => p.Relatorios)

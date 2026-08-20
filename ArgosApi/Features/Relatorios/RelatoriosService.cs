@@ -37,7 +37,7 @@ namespace ArgosApi.Features.Relatorios
         {
             return context.Relatorios
                 .Where((relatorio) => relatorio.ProjetoId == idProjeto)
-                .OrderBy(r => r.DataHoraExecucao);
+                .OrderByDescending(r => r.DataHoraExecucao);
         }
 
         /// <summary>

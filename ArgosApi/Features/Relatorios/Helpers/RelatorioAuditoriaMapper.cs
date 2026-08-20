@@ -48,7 +48,11 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 Pontuacao = resultado.Score,
                 ProblemasCriticos = resultado.CriticalIssues,
                 CriteriosEmagMapeados = resultado.EmagMappings,
-                Apontamentos = [.. resultado.Findings.Select(MapearApontamento)]
+                Apontamentos = [
+                    .. resultado.Findings.OrderBy(a => a.Severity)
+                    .ThenBy(a => a.Title)
+                    .Select(MapearApontamento)
+                ]
             }).ToList();
         }
        

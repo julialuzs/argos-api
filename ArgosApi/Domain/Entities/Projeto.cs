@@ -6,7 +6,7 @@ namespace ArgosApi.Domain.Entities
 
         public string Descricao { get; set; } = "";
 
-        public DateTime UltimaExecucao { get; set; }
+        public DateTime? UltimaExecucao { get; set; }
 
         public ICollection<Usuario> Usuarios { get; set; } = [];
 
