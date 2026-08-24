@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services
-    .AddApplicationServices()
+    .AddApplicationServices(builder.Configuration)
     .AddSwaggerDocumentation()
     .AddDatabaseConfiguration(builder.Configuration)
     .AddAuthenticationServices(builder.Configuration)

@@ -93,11 +93,10 @@ namespace ArgosApi.Features.Projetos
         [Authorize]
         public async Task<ActionResult> Put(
             [FromRoute] int id,
-            [FromBody] Projeto projeto,
+            [FromBody] CriacaoProjetoRequest request,
             CancellationToken cancellationToken = default)
         {
-            projeto.Id = id;
-            var response = await projetosService.EditarProjeto(projeto, cancellationToken);
+            var response = await projetosService.EditarProjeto(id, request, cancellationToken);
             if (response == null)
             {
                 return NotFound();

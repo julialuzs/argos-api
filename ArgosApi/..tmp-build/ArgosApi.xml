@@ -1,0 +1,850 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ArgosApi</name>
+    </assembly>
+    <members>
+        <member name="T:ArgosApi.Data.Configurations.ProjetoConfiguration">
+            <summary>
+            Configuração da entidade Projeto para o EF
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Data.Configurations.RelatorioConfiguration">
+            <summary>
+            Configuração da entidade Relatorio para o EF
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Data.Configurations.UsuarioConfiguration">
+            <summary>
+            Configuração da entidade Usuario para o EF
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Domain.Entities.Relatorio">
+            <summary>
+            Relatório
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.ProjetoId">
+            <summary>
+            Id do projeto
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.Projeto">
+            <summary>
+            Referência ao projeto
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.DataHoraExecucao">
+            <summary>
+            Data/hora em que o relatório foi executado
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.Pontuacao">
+            <summary>
+            Pontuação definida pelo avaliador de acessibilidade
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.Json">
+            <summary>
+            JSON retornado pelo avaliador de acessibiliade contendo os apontamentos
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.TradutorLibrasIdentificado">
+            <summary>
+            Indica se foi identificado algum tradutor de Libras como VLibras
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.QuantidadeErros">
+            <summary>
+            Quantidade de erros identificados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Relatorio.QuantidadeAvisos">
+            <summary>
+            Quantidade de avisos identificados
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Domain.Entities.Usuario">
+            <summary>
+            Entidade de usuário
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Usuario.Nome">
+            <summary>
+            Nome do usuário
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Usuario.Email">
+            <summary>
+            Email do usuário
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Usuario.SenhaHash">
+            <summary>
+            Senha em hash do usuário
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Domain.Entities.Usuario.Projetos">
+            <summary>
+            Projetos vinculados ao usuário
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Domain.Enums.StatusExecucao">
+            <summary>
+            Status da execução sob demanda do avaliador
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Projetos.CriacaoProjetoRequest">
+            <summary>
+            Request para criação ou edição de projeto
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Projetos.CriacaoProjetoRequest.Nome">
+            <summary>
+            Nome do projeto
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Projetos.CriacaoProjetoRequest.Descricao">
+            <summary>
+            Descrição do projeto
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Projetos.CriacaoProjetoRequest.UrlBase">
+            <summary>
+            URL base do site a ser auditado
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Projetos.CriacaoProjetoRequest.Rotas">
+            <summary>
+            Rotas públicas a auditar
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Projetos.CriacaoProjetoRequest.IncluirW3c">
+            <summary>
+            Indica se a validação W3C deve ser incluída
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Projetos.ProjetosController">
+            <summary>
+            Controller responsável por gerenciar os projetos
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.#ctor(ArgosApi.Features.Projetos.ProjetosService)">
+            <summary>
+            Controller responsável por gerenciar os projetos
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.GetPorId(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca o projeto pelo id informado
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+            <returns>Projeto</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.ListarProjetosPorUsuarioLogado(System.Threading.CancellationToken)">
+            <summary>
+            Busca os projetos pelo id do usuário informado
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns>Projetos</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.ListarProjetosPorIdUsuario(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca os projetos pelo id do usuário informado
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+            <returns>Projetos</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.CriarProjeto(ArgosApi.Features.Projetos.CriacaoProjetoRequest,System.Threading.CancellationToken)">
+            <summary>
+            Cria o projeto 
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.Put(System.Int32,ArgosApi.Features.Projetos.CriacaoProjetoRequest,System.Threading.CancellationToken)">
+            <summary>
+            Altera informações do projeto 
+            </summary>
+            <param name="id"></param>
+            <param name="projeto"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosController.VincularUsuarioNoProjeto(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Vincular usuário no projeto 
+            </summary>
+            <param name="id">id do projeto</param>
+            <param name="idUsuario"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="T:ArgosApi.Features.Projetos.ProjetosService">
+            <summary>
+            Service responsável por gerenciar os projetos
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.#ctor(ArgosApi.Data.AppDbContext,ArgosApi.Features.Usuarios.CurrentUser)">
+            <summary>
+            Service responsável por gerenciar os projetos
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.GetProjetoPorId(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca projeto pelo id
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.ListarProjetosPorUsuario(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca todos os projeto pelo id do usuário
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.ListarProjetosPorUsuarioLogado(System.Threading.CancellationToken)">
+            <summary>
+            Busca todos os projeto pelo usuário logado
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.CriarProjeto(ArgosApi.Features.Projetos.CriacaoProjetoRequest,System.Threading.CancellationToken)">
+            <summary>
+            Cria projeto na base de dados
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.EditarProjeto(System.Int64,ArgosApi.Features.Projetos.CriacaoProjetoRequest,System.Threading.CancellationToken)">
+            <summary>
+            Busca projeto pelo id e o altera na base de dados
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Projetos.ProjetosService.VincularUsuarioNoProjeto(System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca projeto pelo id e o altera na base de dados
+            </summary>
+            TODO: implementar tratamento de erros
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Helpers.RelatorioAuditoriaCalculator">
+            <summary>
+            Calculador responsável por calcular a pontuação do relatorio
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.Helpers.RelatorioAuditoriaCalculator.#ctor">
+            <summary>
+            Calculador responsável por calcular a pontuação do relatorio
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Helpers.RelatorioAuditoriaMapper">
+            <summary>
+            Mapeador responsável por mapear a auditoria do relatorio
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.Helpers.RelatorioAuditoriaMapper.#ctor">
+            <summary>
+            Mapeador responsável por mapear a auditoria do relatorio
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.RelatoriosController">
+            <summary>
+            Controller responsável por gerenciar os projetos
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosController.#ctor(ArgosApi.Features.Relatorios.RelatoriosService)">
+            <summary>
+            Controller responsável por gerenciar os projetos
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosController.GetPorId(System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca o relatorio pelo id informado
+            </summary>
+            <param name="idProjeto"></param>
+            <param name="idRelatorio"></param>
+            <param name="cancellationToken"></param>
+            <returns>Projeto</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosController.ListarRelatoriosPorProjeto(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca os relatorios pelo id do projeto informado
+            </summary>
+            <param name="idProjeto"></param>
+            <param name="cancellationToken"></param>
+            <returns>Projetos</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosController.SalvarRelatorio(ArgosApi.Features.Relatorios.Requests.RelatorioRequest,System.Threading.CancellationToken)">
+            <summary>
+            Salva o relatorio em JSON
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosController.Executar(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Dispara a execução sob demanda do avaliador Argos para o projeto
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.RelatoriosService">
+            <summary>
+            Service responsável por gerenciar os relatórios
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosService.#ctor(ArgosApi.Data.AppDbContext,ArgosApi.Features.Usuarios.CurrentUser,ArgosApi.Features.Relatorios.Auditoria.AuditoriaQueue)">
+            <summary>
+            Service responsável por gerenciar os relatórios
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosService.GetRelatorioPorId(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca relatório pelo id
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosService.ListarRelatoriosPorProjeto(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca todos os relatorios pelo id do projeto
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosService.SalvarRelatorio(ArgosApi.Features.Relatorios.Requests.RelatorioRequest,System.Threading.CancellationToken)">
+            <summary>
+            Salvar relatorio na base de dados
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Relatorios.RelatoriosService.IniciarAuditoria(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Enfileira a execução sob demanda do avaliador para o projeto
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Requests.RelatorioAuditoriaJson">
+            <summary>
+            Estrutura do JSON retornado pelo avaliador de acessibilidade
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioAuditoriaJson.Summary">
+            <summary>
+            Resumo da auditoria
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioAuditoriaJson.Results">
+            <summary>
+            Resultados por rota auditada
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioAuditoriaJson.Score">
+            <summary>
+            Pontuação
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioAuditoriaJson.DurationMs">
+            <summary>
+            Duração da execução da auditoria em milissegundos
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioAuditoriaJson.AuditDate">
+            <summary>
+            Data/hora em que a auditoria foi executada
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.SummaryJson.FlowsAudited">
+            <summary>
+            Quantidade de fluxos auditados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.SummaryJson.RoutesAudited">
+            <summary>
+            Quantidade de rotas auditadas
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.SummaryJson.TotalFindings">
+            <summary>
+            Quantidade de apontamentos
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.SummaryJson.AssistiveTechnologies">
+            <summary>
+            Tecnologias assistivas identificadas no site
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson">
+            <summary>
+            Resultado da auditoria de uma rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson.Url">
+            <summary>
+            URL auditada
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson.Path">
+            <summary>
+            Caminho da rota auditada
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson.Score">
+            <summary>
+            Pontuação da rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson.Findings">
+            <summary>
+            Apontamentos encontrados na rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson.EmagMappings">
+            <summary>
+            Critérios eMAG mapeados na rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ResultadoAuditoriaJson.CriticalIssues">
+            <summary>
+            Quantidade de problemas críticos na rota
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Requests.ApontamentoJson">
+            <summary>
+            Apontamento de acessibilidade
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.Id">
+            <summary>
+            Identificador do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.Title">
+            <summary>
+            Título do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.Severity">
+            <summary>
+            Severidade do apontamento.
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.Source">
+            <summary>
+            Ferramenta que originou o apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.Description">
+            <summary>
+            Descrição do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.EmagCriteria">
+            <summary>
+            Critérios eMAG relacionados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.Recommendation">
+            <summary>
+            Recomendação de correção
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.HelpUrl">
+            <summary>
+            URL de ajuda sobre o apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.WcagRefs">
+            <summary>
+            Referências WCAG relacionadas
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.HtmlElement">
+            <summary>
+            Elemento HTML relacionado ao apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.CssSelector">
+            <summary>
+            Seletor CSS relacionado ao apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.ApontamentoJson.ElementCount">
+            <summary>
+            Quantidade de elementos afetados
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Requests.TecnologiasAssistivasJson">
+            <summary>
+            Tecnologias assistivas detectadas
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.TecnologiasAssistivasJson.VLibras">
+            <summary>
+            Indica presença do VLibras
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.TecnologiasAssistivasJson.HandTalk">
+            <summary>
+            Indica presença do Hand Talk
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Requests.RelatorioRequest">
+            <summary>
+            Request para criação de relatório
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioRequest.Json">
+            <summary>
+            JSON contendo relatório
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Requests.RelatorioRequest.IdProjeto">
+            <summary>
+            Id do projeto relacionado
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse">
+            <summary>
+            Resposta detalhada de um relatório com apontamentos já tratados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.Id">
+            <summary>
+            Id do relatório
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.ProjetoId">
+            <summary>
+            Id do projeto
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.DataHoraExecucao">
+            <summary>
+            Data/hora em que o relatório foi executado
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.Pontuacao">
+            <summary>
+            Pontuação média da auditoria
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.TradutorLibrasIdentificado">
+            <summary>
+            Indica se o VLibras foi identificado
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.HandTalkIdentificado">
+            <summary>
+            Indica se o Hand Talk foi identificado
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.QuantidadeErros">
+            <summary>
+            Quantidade de erros identificados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.QuantidadeAvisos">
+            <summary>
+            Quantidade de avisos identificados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.RotasAuditadas">
+            <summary>
+            Quantidade de rotas auditadas
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.FluxosAuditados">
+            <summary>
+            Quantidade de fluxos auditados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.RelatorioDetalheResponse.Resultados">
+            <summary>
+            Resultados por rota auditada
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse">
+            <summary>
+            Resultado da auditoria de uma rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse.Url">
+            <summary>
+            URL auditada
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse.Caminho">
+            <summary>
+            Caminho da rota auditada
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse.Pontuacao">
+            <summary>
+            Pontuação da rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse.ProblemasCriticos">
+            <summary>
+            Quantidade de problemas críticos na rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse.CriteriosEmagMapeados">
+            <summary>
+            Critérios eMAG mapeados na rota
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ResultadoAuditoriaResponse.Apontamentos">
+            <summary>
+            Apontamentos encontrados na rota
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse">
+            <summary>
+            Apontamento de acessibilidade tratado
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Id">
+            <summary>
+            Identificador do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Titulo">
+            <summary>
+            Título do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Severidade">
+            <summary>
+            Severidade do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Tipo">
+            <summary>
+            Tipo do apontamento: erro ou aviso
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Fonte">
+            <summary>
+            Ferramenta que originou o apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Descricao">
+            <summary>
+            Descrição do apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.CriteriosEmag">
+            <summary>
+            Critérios eMAG relacionados
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.Recomendacao">
+            <summary>
+            Recomendação de correção
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.UrlAjuda">
+            <summary>
+            URL de ajuda sobre o apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.ReferenciasWcag">
+            <summary>
+            Referências WCAG relacionadas
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.ElementoHtml">
+            <summary>
+            Elemento HTML relacionado ao apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.SeletorCss">
+            <summary>
+            Seletor CSS relacionado ao apontamento
+            </summary>
+        </member>
+        <member name="P:ArgosApi.Features.Relatorios.Responses.ApontamentoResponse.QuantidadeElementos">
+            <summary>
+            Quantidade de elementos afetados
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Relatorios.SeveridadeEnum">
+            <summary>
+            Enumeração de severidade dos apontamentos
+            </summary>
+        </member>
+        <member name="F:ArgosApi.Features.Relatorios.SeveridadeEnum.Critical">
+            <summary>
+            Severidade crítica, indica um problema que precisa ser corrigido imediatamente
+            </summary>
+        </member>
+        <member name="F:ArgosApi.Features.Relatorios.SeveridadeEnum.Serious">
+            <summary>
+            Severidade séria, indica um problema que precisa ser corrigido o quanto antes
+            </summary>
+        </member>
+        <member name="F:ArgosApi.Features.Relatorios.SeveridadeEnum.Moderate">
+            <summary>
+            Severidade moderada, indica um problema que deve ser corrigido, mas não é urgente
+            </summary>
+        </member>
+        <member name="F:ArgosApi.Features.Relatorios.SeveridadeEnum.Minor">
+            <summary>
+            Severidade baixa, indica um problema que pode ser corrigido em um momento posterior
+            </summary>
+        </member>
+        <member name="F:ArgosApi.Features.Relatorios.SeveridadeEnum.Info">
+            <summary>
+            Severidade informativa, indica uma informação relevante, mas que não representa um problema
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Usuarios.CriacaoUsuarioRequest">
+            <summary>
+            Request para criação de usuário
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Features.Usuarios.UsuariosController">
+            <summary>
+            Controller responsável por gerenciar os usuários
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosController.#ctor(ArgosApi.Features.Usuarios.UsuariosService)">
+            <summary>
+            Controller responsável por gerenciar os usuários
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosController.GetPorId(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca o usuário pelo id informado
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+            <returns>Usuario</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosController.GetUsuarioLogado(System.Threading.CancellationToken)">
+            <summary>
+            Busca o usuário logado através dos dados do token de autenticação
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns>Usuario</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosController.CriarUsuario(ArgosApi.Features.Usuarios.CriacaoUsuarioRequest,System.Threading.CancellationToken)">
+            <summary>
+            Cria o usuário
+            </summary>
+            <param name="usuario"></param>
+            <param name="cancellationToken"></param>
+            <returns>Usuario</returns>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosController.AlterarUsuario(System.Int32,ArgosApi.Domain.Entities.Usuario,System.Threading.CancellationToken)">
+            <summary>
+            Altera informações do usuário 
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosController.Delete(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Deleta o usuário 
+            </summary>
+            <param name="id"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="T:ArgosApi.Features.Usuarios.UsuariosService">
+            <summary>
+            Service responsável por gerenciar os usuários
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosService.#ctor(ArgosApi.Data.AppDbContext,ArgosApi.Features.Usuarios.CurrentUser)">
+            <summary>
+            Service responsável por gerenciar os usuários
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosService.GetUsuarioPorId(System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Busca usuário pelo id
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosService.GetUsuarioLogado(System.Threading.CancellationToken)">
+            <summary>
+            Busca usuário logado pelo token de autenticação
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosService.CriarUsuario(ArgosApi.Features.Usuarios.CriacaoUsuarioRequest,System.Threading.CancellationToken)">
+            <summary>
+            Cria usuário na base de dados
+            </summary>
+        </member>
+        <member name="M:ArgosApi.Features.Usuarios.UsuariosService.AlterarUsuario(ArgosApi.Domain.Entities.Usuario,System.Threading.CancellationToken)">
+            <summary>
+            Busca usuário pelo id e altera os dados na base de dados
+            </summary>
+        </member>
+        <member name="T:ArgosApi.Migrations.CriacaoInicial">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.CriacaoInicial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.CriacaoInicial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.CriacaoInicial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ArgosApi.Migrations.AdicionaDescricaoNoProjeto">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaDescricaoNoProjeto.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaDescricaoNoProjeto.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaDescricaoNoProjeto.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ArgosApi.Migrations.AdicionaAutenticacao">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaAutenticacao.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaAutenticacao.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaAutenticacao.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ArgosApi.Migrations.CriaUltimaExecucao">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.CriaUltimaExecucao.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.CriaUltimaExecucao.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.CriaUltimaExecucao.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ArgosApi.Migrations.UltimaExecucaoNullable">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.UltimaExecucaoNullable.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.UltimaExecucaoNullable.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.UltimaExecucaoNullable.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ArgosApi.Migrations.AdicionaConfiguracaoAuditoriaProjeto">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaConfiguracaoAuditoriaProjeto.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaConfiguracaoAuditoriaProjeto.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ArgosApi.Migrations.AdicionaConfiguracaoAuditoriaProjeto.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+    </members>
+</doc>

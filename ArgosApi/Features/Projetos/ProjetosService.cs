@@ -9,13 +9,15 @@ namespace ArgosApi.Features.Projetos
     /// Service responsável por gerenciar os projetos
     /// </summary>
     public class ProjetosService(AppDbContext context, CurrentUser currentUser)
-    { 
+    {
         /// <summary>
         /// Busca projeto pelo id
         /// </summary>
         public async Task<Projeto?> GetProjetoPorId(long id, CancellationToken cancellationToken)
         {
-            return await context.Projetos.FindAsync(id, cancellationToken);
+            return await context.Projetos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
         }
 
         /// <summary>
@@ -23,10 +25,10 @@ namespace ArgosApi.Features.Projetos
         /// </summary>
         public async Task<List<Projeto>> ListarProjetosPorUsuario(long idUsuario, CancellationToken cancellationToken)
         {
-            return context.Projetos.Where((projeto) => 
+            return await context.Projetos.AsNoTracking().Where((projeto) =>
                 projeto.Usuarios
                     .Select(u => u.Id)
-                    .Contains(idUsuario)).ToList() ?? [];
+                    .Contains(idUsuario)).ToListAsync(cancellationToken);
         }
 
         /// <summary>
@@ -34,10 +36,10 @@ namespace ArgosApi.Features.Projetos
         /// </summary>
         public async Task<List<Projeto>> ListarProjetosPorUsuarioLogado(CancellationToken cancellationToken)
         {
-            return context.Projetos.Where((projeto) =>
+            return await context.Projetos.AsNoTracking().Where((projeto) =>
                 projeto.Usuarios
                     .Select(u => u.Id)
-                    .Contains(currentUser.Id)).ToList() ?? [];
+                    .Contains(currentUser.Id)).ToListAsync(cancellationToken);
         }
 
         /// <summary>
@@ -45,15 +47,21 @@ namespace ArgosApi.Features.Projetos
         /// </summary>
         public async Task CriarProjeto(CriacaoProjetoRequest projeto, CancellationToken cancellationToken)
         {
-            var usuario = await context.Usuarios.FindAsync(currentUser.Id, cancellationToken);
+            var usuario = await context.Usuarios.FindAsync([currentUser.Id], cancellationToken);
 
             var novoProjeto = new Projeto
             {
                 Nome = projeto.Nome,
                 Descricao = projeto.Descricao,
+                UrlBase = projeto.UrlBase?.Trim() ?? "",
+                Rotas = NormalizarRotas(projeto.Rotas),
+                IncluirW3c = projeto.IncluirW3c,
             };
 
-            novoProjeto.Usuarios.Add(usuario);
+            if (usuario is not null)
+            {
+                novoProjeto.Usuarios.Add(usuario);
+            }
 
             await context.Projetos.AddAsync(novoProjeto, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
@@ -62,14 +70,22 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Busca projeto pelo id e o altera na base de dados
         /// </summary>
-        public async Task<Projeto?> EditarProjeto(Projeto projeto, CancellationToken cancellationToken)
+        public async Task<Projeto?> EditarProjeto(long id, CriacaoProjetoRequest request, CancellationToken cancellationToken)
         {
-            var entity = await context.Projetos.FindAsync(projeto.Id);
+            var entity = await context.Projetos
+                .Include(p => p.Usuarios)
+                .FirstOrDefaultAsync(p => p.Id == id && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
             if (entity == null)
             {
                 return null;
             }
-            entity = projeto;
+
+            entity.Nome = request.Nome;
+            entity.Descricao = request.Descricao;
+            entity.UrlBase = request.UrlBase?.Trim() ?? "";
+            entity.Rotas = NormalizarRotas(request.Rotas);
+            entity.IncluirW3c = request.IncluirW3c;
+
             await context.SaveChangesAsync(cancellationToken);
             return entity;
         }
@@ -80,25 +96,32 @@ namespace ArgosApi.Features.Projetos
         /// TODO: implementar tratamento de erros
         public async Task<Projeto?> VincularUsuarioNoProjeto(long idProjeto, long idUsuario, CancellationToken cancellationToken)
         {
-            var entityProjeto = await context.Projetos.FindAsync(idProjeto, cancellationToken);
+            var entityProjeto = await context.Projetos.FindAsync([idProjeto], cancellationToken);
             if (entityProjeto == null)
             {
-                // projeto nao encontrado
                 return null;
             }
 
-            var entityUsuario = await context.Usuarios.FindAsync(idUsuario, cancellationToken);
+            var entityUsuario = await context.Usuarios.FindAsync([idUsuario], cancellationToken);
             if (entityUsuario == null)
             {
-                // usuario nao encontrado
                 return null;
             }
 
             entityProjeto.Usuarios.Add(entityUsuario);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
 
             return entityProjeto;
         }
 
+        private static string[] NormalizarRotas(string[]? rotas)
+        {
+            var normalizadas = (rotas ?? [])
+                .Select(r => r.Trim())
+                .Where(r => r.Length > 0)
+                .ToArray();
+
+            return normalizadas.Length > 0 ? normalizadas : ["/"];
+        }
     }
 }

@@ -47,6 +47,38 @@ namespace ArgosApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("ultima_execucao");
 
+                    b.Property<string>("UrlBase")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)")
+                        .HasDefaultValue("")
+                        .HasColumnName("url_base");
+
+                    b.Property<string[]>("Rotas")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text[]")
+                        .HasDefaultValue(new[] { "/" })
+                        .HasColumnName("rotas");
+
+                    b.Property<bool>("IncluirW3c")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("incluir_w3c");
+
+                    b.Property<int>("StatusExecucao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("status_execucao");
+
+                    b.Property<string>("MensagemErroExecucao")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("mensagem_erro_execucao");
+
                     b.HasKey("Id")
                         .HasName("pk_projeto");
 

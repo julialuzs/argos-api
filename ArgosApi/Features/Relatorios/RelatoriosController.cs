@@ -83,5 +83,23 @@ namespace ArgosApi.Features.Relatorios
                 });
             }
         }
+
+        /// <summary>
+        /// Dispara a execução sob demanda do avaliador Argos para o projeto
+        /// </summary>
+        [HttpPost("{idProjeto}/executar")]
+        [Authorize]
+        public async Task<ActionResult> Executar(
+            [FromRoute] long idProjeto, CancellationToken cancellationToken = default)
+        {
+            var resultado = await relatoriosService.IniciarAuditoria(idProjeto, cancellationToken);
+            return resultado.StatusCode switch
+            {
+                StatusCodes.Status202Accepted => Accepted(),
+                StatusCodes.Status400BadRequest => BadRequest(new { message = resultado.Message }),
+                StatusCodes.Status409Conflict => Conflict(new { message = resultado.Message }),
+                _ => NotFound()
+            };
+        }
     }
 }

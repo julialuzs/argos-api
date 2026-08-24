@@ -1,4 +1,5 @@
 using ArgosApi.Domain.Entities;
+using ArgosApi.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -25,6 +26,27 @@ namespace ArgosApi.Data.Configurations
 
             builder.Property(p => p.UltimaExecucao)
                 .IsRequired(false);
+
+            builder.Property(p => p.UrlBase)
+                .HasMaxLength(2048)
+                .HasDefaultValue("")
+                .IsRequired();
+
+            builder.Property(p => p.Rotas)
+                .HasColumnType("text[]")
+                .HasDefaultValue(new[] { "/" })
+                .IsRequired();
+
+            builder.Property(p => p.IncluirW3c)
+                .HasDefaultValue(false)
+                .IsRequired();
+
+            builder.Property(p => p.StatusExecucao)
+                .HasDefaultValue(StatusExecucao.Idle)
+                .IsRequired();
+
+            builder.Property(p => p.MensagemErroExecucao)
+                .HasMaxLength(2000);
 
             builder
                 .HasMany(p => p.Relatorios)

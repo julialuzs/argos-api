@@ -1,6 +1,7 @@
 using ArgosApi.Features.Authentication;
 using ArgosApi.Features.Projetos;
 using ArgosApi.Features.Relatorios;
+using ArgosApi.Features.Relatorios.Auditoria;
 using ArgosApi.Features.Usuarios;
 using ArgosApi.Infrastructure.Authentication;
 
@@ -9,8 +10,15 @@ namespace ArgosApi.Common.Extensions
     public static class ApplicationExtensions
     {
         public static IServiceCollection AddApplicationServices(
-            this IServiceCollection services)
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
+            services.Configure<ArgosAvaliadorOptions>(
+                configuration.GetSection(ArgosAvaliadorOptions.SectionName));
+            services.AddSingleton<AuditoriaQueue>();
+            services.AddSingleton<AuditoriaExecutor>();
+            services.AddHostedService<AuditoriaWorker>();
+
             services.AddScoped<ProjetosService>();
             services.AddScoped<RelatoriosService>();
             //services.AddScoped<DashboardService>();
