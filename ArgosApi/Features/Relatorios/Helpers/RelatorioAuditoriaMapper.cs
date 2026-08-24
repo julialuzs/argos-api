@@ -71,6 +71,7 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 UrlAjuda = apontamento.HelpUrl,
                 ReferenciasWcag = apontamento.WcagRefs,
                 ElementoHtml = apontamento.HtmlElement,
+                SeletorCss = apontamento.CssSelector,
                 QuantidadeElementos = apontamento.ElementCount
             };
         }

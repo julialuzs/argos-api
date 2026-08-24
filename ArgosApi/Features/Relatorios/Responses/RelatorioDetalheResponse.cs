@@ -158,6 +158,11 @@ namespace ArgosApi.Features.Relatorios.Responses
         public string? ElementoHtml { get; set; }
 
         /// <summary>
+        /// Seletor CSS relacionado ao apontamento
+        /// </summary>
+        public string? SeletorCss { get; set; }
+
+        /// <summary>
         /// Quantidade de elementos afetados
         /// </summary>
         public int? QuantidadeElementos { get; set; }
