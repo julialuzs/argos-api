@@ -1,4 +1,5 @@
 using ArgosApi.Features.Authentication;
+using ArgosApi.Features.Dashboard;
 using ArgosApi.Features.Projetos;
 using ArgosApi.Features.Relatorios;
 using ArgosApi.Features.Relatorios.Auditoria;
@@ -27,7 +28,7 @@ namespace ArgosApi.Common.Extensions
 
             services.AddScoped<ProjetosService>();
             services.AddScoped<RelatoriosService>();
-            //services.AddScoped<DashboardService>();
+            services.AddScoped<DashboardService>();
             services.AddScoped<UsuariosService>();
             services.AddScoped<AuthService>();
             services.AddScoped<JwtService>();
