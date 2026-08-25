@@ -10,6 +10,9 @@ namespace ArgosApi.Data.Configurations
     /// </summary>
     public class ProjetoConfiguration : IEntityTypeConfiguration<Projeto>
     {
+        /// <summary>
+        /// Configura o mapeamento da entidade Projeto
+        /// </summary>
         public void Configure(EntityTypeBuilder<Projeto> builder)
         {
             builder.ToTable("projeto");
@@ -22,6 +25,9 @@ namespace ArgosApi.Data.Configurations
 
             builder.Property(p => p.Descricao)
                 .HasMaxLength(250)
+                .IsRequired();
+
+            builder.Property(p => p.Guid)
                 .IsRequired();
 
             builder.Property(p => p.UltimaExecucao)

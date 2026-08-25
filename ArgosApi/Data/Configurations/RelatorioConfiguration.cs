@@ -9,6 +9,9 @@ namespace ArgosApi.Data.Configurations
     /// </summary>
     public class RelatorioConfiguration : IEntityTypeConfiguration<Relatorio>
     {
+        /// <summary>
+        /// Configura o mapeamento da entidade Relatorio
+        /// </summary>
         public void Configure(EntityTypeBuilder<Relatorio> builder)
         {
             builder.ToTable("relatorio");

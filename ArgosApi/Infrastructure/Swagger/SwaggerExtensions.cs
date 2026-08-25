@@ -4,8 +4,14 @@ using System.Reflection;
 
 namespace ArgosApi.Infrastructure.Swagger
 {
+    /// <summary>
+    /// Extensões de configuração da documentação Swagger
+    /// </summary>
     public static class SwaggerExtensions
     {
+        /// <summary>
+        /// Registra o Swagger com autenticação JWT e comentários XML
+        /// </summary>
         public static IServiceCollection AddSwaggerDocumentation(
             this IServiceCollection services)
         {

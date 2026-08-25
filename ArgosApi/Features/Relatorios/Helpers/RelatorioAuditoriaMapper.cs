@@ -14,6 +14,9 @@ namespace ArgosApi.Features.Relatorios.Helpers
         {
             PropertyNameCaseInsensitive = true
         };
+        /// <summary>
+        /// Mapeia a entidade de relatório para o detalhe exibido na API
+        /// </summary>
         public static RelatorioDetalheResponse MapearParaDetalhe(Relatorio relatorio)
         {
             var auditoria = JsonSerializer.Deserialize<RelatorioAuditoriaJson>(relatorio.Json, JsonOptions);
@@ -34,6 +37,9 @@ namespace ArgosApi.Features.Relatorios.Helpers
             };
         }
 
+        /// <summary>
+        /// Mapeia os resultados por rota da auditoria
+        /// </summary>
         public static List<ResultadoAuditoriaResponse> MapearResultados(RelatorioAuditoriaJson? auditoria)
         {
             if (auditoria?.Results is not { Count: > 0 } resultados)
@@ -56,6 +62,9 @@ namespace ArgosApi.Features.Relatorios.Helpers
             }).ToList();
         }
        
+        /// <summary>
+        /// Mapeia um apontamento do JSON do avaliador para a resposta da API
+        /// </summary>
         public static ApontamentoResponse MapearApontamento(ApontamentoJson apontamento)
         { 
             return new ApontamentoResponse
@@ -76,6 +85,9 @@ namespace ArgosApi.Features.Relatorios.Helpers
             };
         }
 
+        /// <summary>
+        /// Obtém o tipo do apontamento a partir da severidade
+        /// </summary>
         public static string ObterTipoApontamento(SeveridadeEnum severidade) =>
             severidade is SeveridadeEnum.Serious or SeveridadeEnum.Critical ? "erro" : "aviso";
 

@@ -13,7 +13,7 @@ namespace ArgosApi.Domain.Entities
         /// <summary>
         /// Referência ao projeto
         /// </summary>
-        public Projeto Projeto { get; set; }
+        public Projeto Projeto { get; set; } = null!;
 
         /// <summary>
         /// Data/hora em que o relatório foi executado

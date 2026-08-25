@@ -7,6 +7,9 @@ namespace ArgosApi.Features.Usuarios
     /// </summary>
     public class CriacaoUsuarioRequest
     {
+        /// <summary>
+        /// Nome do usuário
+        /// </summary>
         [Required(ErrorMessage = "O nome é obrigatório.")]
         [StringLength(
         80,
@@ -14,10 +17,16 @@ namespace ArgosApi.Features.Usuarios
         ErrorMessage = "O nome deve ter entre 2 e 80 caracteres.")]
         public required string Nome { get; set; }
 
+        /// <summary>
+        /// E-mail do usuário
+        /// </summary>
         [Required(ErrorMessage = "O e-mail é obrigatório.")]
         [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
         public required string Email { get; set; }
 
+        /// <summary>
+        /// Senha do usuário
+        /// </summary>
         [Required(ErrorMessage = "A senha é obrigatória.")]
         [StringLength(
         100,
@@ -28,6 +37,9 @@ namespace ArgosApi.Features.Usuarios
         ErrorMessage = "A senha deve conter letras maiúsculas, minúsculas e números.")]
         public required string Senha { get; set; }
 
+        /// <summary>
+        /// Confirmação da senha do usuário
+        /// </summary>
         [Required(ErrorMessage = "A confirmação de senha é obrigatória.")]
         [Compare(
         nameof(Senha),

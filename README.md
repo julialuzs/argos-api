@@ -1,4 +1,6 @@
-# argos-api
+# Argos Api
+
+API Rest do sistema Argos.
 
 - http://localhost:5095
 - https://localhost:7202/index.html (Swagger UI)

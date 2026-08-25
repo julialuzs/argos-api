@@ -56,6 +56,7 @@ namespace ArgosApi.Features.Projetos
                 UrlBase = projeto.UrlBase?.Trim() ?? "",
                 Rotas = NormalizarRotas(projeto.Rotas),
                 IncluirW3c = projeto.IncluirW3c,
+                Guid = Guid.NewGuid(),
             };
 
             if (usuario is not null)

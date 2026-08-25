@@ -4,8 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArgosApi.Features.Authentication
 {
+    /// <summary>
+    /// Service responsável pela autenticação de usuários
+    /// </summary>
     public class AuthService(AppDbContext context, JwtService jwtService)
     {
+        /// <summary>
+        /// Valida as credenciais e gera o token JWT
+        /// </summary>
         public async Task<LoginResponse> LoginAsync(
             LoginRequest request,
             CancellationToken cancellationToken = default)

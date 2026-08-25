@@ -7,15 +7,24 @@ using System.Text;
 
 namespace ArgosApi.Infrastructure.Authentication
 {
+    /// <summary>
+    /// Serviço responsável por gerar tokens JWT
+    /// </summary>
     public class JwtService
     {
         private readonly JwtOptions _options;
 
+        /// <summary>
+        /// Inicializa o serviço com as opções de JWT
+        /// </summary>
         public JwtService(IOptions<JwtOptions> options)
         {
             _options = options.Value;
         }
 
+        /// <summary>
+        /// Gera o token JWT para o usuário informado
+        /// </summary>
         public JwtToken GenerateToken(Usuario usuario)
         {
             var expiration = DateTime.UtcNow.AddMinutes(_options.ExpirationMinutes);

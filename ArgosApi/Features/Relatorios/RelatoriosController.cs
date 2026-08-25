@@ -70,6 +70,10 @@ namespace ArgosApi.Features.Relatorios
                 await relatoriosService.SalvarRelatorio(request, cancellationToken);
                 return Ok();
             }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = "Projeto não encontrado." });
+            }
             catch (RelatorioJsonInvalidoException ex)
             {
                 var jsonEx = ex.InnerException as JsonException;

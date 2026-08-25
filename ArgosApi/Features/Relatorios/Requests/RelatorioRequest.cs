@@ -13,8 +13,8 @@ namespace ArgosApi.Features.Relatorios.Requests
         public JsonElement Json { get; set; }
         
         /// <summary>
-        /// Id do projeto relacionado
+        /// Guid público do projeto relacionado
         /// </summary>
-        public long IdProjeto { get; set; }
-    } 
+        public Guid GuidProjeto { get; set; }
+    }
 }

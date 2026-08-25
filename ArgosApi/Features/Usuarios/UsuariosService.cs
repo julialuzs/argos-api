@@ -21,7 +21,7 @@ namespace ArgosApi.Features.Usuarios
         /// <summary>
         /// Busca usuário logado pelo token de autenticação
         /// </summary>
-        public async Task<UsuarioResponse> GetUsuarioLogado(CancellationToken cancellationToken = default)
+        public async Task<UsuarioResponse?> GetUsuarioLogado(CancellationToken cancellationToken = default)
         {
             var id = currentUser.Id;
             var usuarioLogado = await GetUsuarioPorId(id, cancellationToken);

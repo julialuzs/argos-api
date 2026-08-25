@@ -8,8 +8,19 @@ namespace ArgosApi.Domain.Enums
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum StatusExecucao
     {
+        /// <summary>
+        /// Nenhuma execução em andamento
+        /// </summary>
         Idle = 0,
+
+        /// <summary>
+        /// Avaliação em andamento
+        /// </summary>
         Executando = 1,
+
+        /// <summary>
+        /// Última avaliação falhou
+        /// </summary>
         Falhou = 2
     }
 }

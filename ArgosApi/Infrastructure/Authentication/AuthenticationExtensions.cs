@@ -4,8 +4,14 @@ using System.Text;
 
 namespace ArgosApi.Infrastructure.Authentication
 {
+    /// <summary>
+    /// Extensões de registro da autenticação JWT
+    /// </summary>
     public static class AuthenticationExtensions
     {
+        /// <summary>
+        /// Configura autenticação e validação de tokens JWT
+        /// </summary>
         public static IServiceCollection AddAuthenticationServices(
         this IServiceCollection services,
         IConfiguration configuration)

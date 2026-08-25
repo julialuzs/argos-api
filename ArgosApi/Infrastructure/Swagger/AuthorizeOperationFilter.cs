@@ -5,8 +5,14 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ArgosApi.Infrastructure.Swagger
 {
+    /// <summary>
+    /// Filtro que aplica requisitos de autorização nas operações do Swagger
+    /// </summary>
     public class AuthorizeOperationFilter : IOperationFilter
     { 
+        /// <summary>
+        /// Aplica o requisito de autenticação nas operações protegidas
+        /// </summary>
         public void Apply(
             OpenApiOperation operation,
             OperationFilterContext context)

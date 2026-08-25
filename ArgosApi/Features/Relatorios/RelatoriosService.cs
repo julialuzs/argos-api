@@ -69,10 +69,20 @@ namespace ArgosApi.Features.Relatorios
                     ex);
             }
 
+            if (request.GuidProjeto == Guid.Empty)
+            {
+                throw new KeyNotFoundException("Projeto não encontrado.");
+            }
+
+            var projeto = await context.Projetos.FirstOrDefaultAsync(p => p.Guid == request.GuidProjeto, cancellationToken);
+            if (projeto is null)
+            {
+                throw new KeyNotFoundException("Projeto não encontrado.");
+            }
             var relatorio = new Relatorio
             {
                 Json = jsonText,
-                ProjetoId = request.IdProjeto,
+                ProjetoId = projeto.Id,
                 DataHoraExecucao = auditoria?.AuditDate ?? DateTime.UtcNow,
                 Pontuacao = auditoria?.Summary?.Score ?? 0,
                 TradutorLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
@@ -80,8 +90,7 @@ namespace ArgosApi.Features.Relatorios
                 QuantidadeAvisos = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Moderate, SeveridadeEnum.Minor)
             };
 
-            var projeto = await context.Projetos.FindAsync([request.IdProjeto], cancellationToken);
-            projeto!.UltimaExecucao = relatorio.DataHoraExecucao;
+            projeto.UltimaExecucao = relatorio.DataHoraExecucao;
             projeto.StatusExecucao = StatusExecucao.Idle;
             projeto.MensagemErroExecucao = null;
 

@@ -7,8 +7,14 @@ using ArgosApi.Infrastructure.Authentication;
 
 namespace ArgosApi.Common.Extensions
 {
+    /// <summary>
+    /// Extensões de registro dos serviços da aplicação
+    /// </summary>
     public static class ApplicationExtensions
     {
+        /// <summary>
+        /// Registra os serviços de domínio e infraestrutura da aplicação
+        /// </summary>
         public static IServiceCollection AddApplicationServices(
             this IServiceCollection services,
             IConfiguration configuration)

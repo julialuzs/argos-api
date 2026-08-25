@@ -8,7 +8,7 @@ namespace ArgosApi.Features.Relatorios.Requests
         /// <summary>
         /// Resumo da auditoria
         /// </summary>
-        public SummaryJson Summary { get; set; }
+        public SummaryJson Summary { get; set; } = new();
         
         // TODO: melhorar json para que ele não tenha nomes em ingles
         /// <summary>
@@ -32,11 +32,20 @@ namespace ArgosApi.Features.Relatorios.Requests
         public DateTime? AuditDate { get; set; }
     }
 
+    /// <summary>
+    /// Resumo quantitativo da auditoria
+    /// </summary>
     public class SummaryJson
     {
+        /// <summary>
+        /// Pontuação geral da auditoria
+        /// </summary>
         public int Score { get; set; }
 
-        public Dictionary<SeveridadeEnum, int> BySeverity { get; set; }
+        /// <summary>
+        /// Quantidade de apontamentos agrupados por severidade
+        /// </summary>
+        public Dictionary<SeveridadeEnum, int> BySeverity { get; set; } = [];
 
         /// <summary>
         /// Quantidade de fluxos auditados

@@ -87,7 +87,7 @@ namespace ArgosApi.Features.Projetos
         /// Altera informações do projeto 
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="projeto"></param>
+        /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         [HttpPut("{id}")]
         [Authorize]
@@ -125,6 +125,10 @@ namespace ArgosApi.Features.Projetos
             return Ok();
         }
 
+        /// <summary>
+        /// Remove o projeto pelo id informado
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         [Authorize]
         public ActionResult<string> Delete(int id)

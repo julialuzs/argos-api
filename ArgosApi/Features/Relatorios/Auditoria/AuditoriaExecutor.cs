@@ -8,6 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace ArgosApi.Features.Relatorios.Auditoria
 {
+    /// <summary>
+    /// Executa a CLI do avaliador de acessibilidade para um projeto
+    /// </summary>
     public class AuditoriaExecutor(
         IServiceScopeFactory scopeFactory,
         IWebHostEnvironment environment,
@@ -19,6 +22,9 @@ namespace ArgosApi.Features.Relatorios.Auditoria
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
+        /// <summary>
+        /// Executa a auditoria do projeto informado
+        /// </summary>
         public async Task ExecutarAsync(long projetoId, CancellationToken cancellationToken)
         {
             var opts = options.Value;
@@ -31,6 +37,12 @@ namespace ArgosApi.Features.Relatorios.Auditoria
             if (projeto is null)
             {
                 logger.LogWarning("Projeto {ProjetoId} não encontrado para auditoria", projetoId);
+                return;
+            }
+
+            if (projeto.Guid == Guid.Empty)
+            {
+                await MarcarFalhaAsync(context, projetoId, "Projeto sem identificador público (Guid).", cancellationToken);
                 return;
             }
 
@@ -49,14 +61,13 @@ namespace ArgosApi.Features.Relatorios.Auditoria
             var tempDir = Path.Combine(Path.GetTempPath(), "argos-auditoria", $"{projetoId}-{Guid.NewGuid():N}");
             Directory.CreateDirectory(tempDir);
             var configPath = Path.Combine(tempDir, "argos.config.json");
-            var outputPath = Path.Combine(tempDir, "report.json");
 
             var config = new
             {
                 baseUrl = projeto.UrlBase,
                 routes = projeto.Rotas is { Length: > 0 } ? projeto.Rotas : new[] { "/" },
                 includeW3c = projeto.IncluirW3c,
-                projectId = projeto.Id
+                projectId = projeto.Guid
             };
 
             await File.WriteAllTextAsync(configPath, JsonSerializer.Serialize(config, JsonOptions), cancellationToken);
@@ -73,8 +84,6 @@ namespace ArgosApi.Features.Relatorios.Auditoria
             psi.ArgumentList.Add(cliPath);
             psi.ArgumentList.Add("--config");
             psi.ArgumentList.Add(configPath);
-            psi.ArgumentList.Add("--out");
-            psi.ArgumentList.Add(outputPath);
             psi.Environment["ARGOS_API_RELATORIOS_ENDPOINT"] = opts.ApiRelatoriosEndpoint;
 
             logger.LogInformation("Iniciando avaliador Argos para o projeto {ProjetoId}", projetoId);
@@ -166,10 +175,7 @@ namespace ArgosApi.Features.Relatorios.Auditoria
                     process.WaitForExit(5000);
                 }
             }
-            catch
-            {
-                // ignored
-            }
+            catch {}
         }
 
         private static async Task MarcarFalhaAsync(AppDbContext context, long projetoId, string mensagem, CancellationToken cancellationToken)

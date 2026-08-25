@@ -67,6 +67,7 @@ namespace ArgosApi.Features.Usuarios
         /// Altera informações do usuário 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="usuario"></param>
         /// <param name="cancellationToken"></param>
         [HttpPut("{id}")]
         [Authorize]

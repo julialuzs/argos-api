@@ -9,6 +9,9 @@ namespace ArgosApi.Data.Configurations
     /// </summary>
     public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
 	{
+		/// <summary>
+		/// Configura o mapeamento da entidade Usuario
+		/// </summary>
 		public void Configure(EntityTypeBuilder<Usuario> builder)
 		{
 			builder.ToTable("usuario");

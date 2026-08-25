@@ -8,6 +8,9 @@ namespace ArgosApi.Features.Relatorios.Helpers
     public class RelatorioAuditoriaCalculator( )
     {
 
+        /// <summary>
+        /// Conta apontamentos da auditoria filtrando pelas severidades informadas
+        /// </summary>
         public static int ContarApontamentosPorSeveridade(
             RelatorioAuditoriaJson? auditoria,
             params SeveridadeEnum[] severidades)
