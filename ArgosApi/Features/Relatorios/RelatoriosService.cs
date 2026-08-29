@@ -26,11 +26,17 @@ namespace ArgosApi.Features.Relatorios
             PropertyNameCaseInsensitive = true
         };
         /// <summary>
-        /// Busca relatório pelo id
+        /// Busca relatório pelo Guid do projeto e o id do relatório
         /// </summary>
-        public async Task<RelatorioDetalheResponse?> GetRelatorioPorId(long id, CancellationToken cancellationToken)
+        public async Task<RelatorioDetalheResponse?> GetRelatorioPorId(
+            Guid guidProjeto, long idRelatorio, CancellationToken cancellationToken)
         {
-            var relatorio = await context.Relatorios.FindAsync(id, cancellationToken);
+            var relatorio = await context.Relatorios
+                .AsNoTracking()
+                .Where(r => r.Id == idRelatorio
+                    && r.Projeto.Guid == guidProjeto
+                    && r.Projeto.Usuarios.Any(u => u.Id == currentUser.Id))
+                .FirstOrDefaultAsync(cancellationToken);
             if (relatorio is null)
             {
                 return null;
@@ -40,13 +46,22 @@ namespace ArgosApi.Features.Relatorios
         }
 
         /// <summary>
-        /// Busca todos os relatorios pelo id do projeto
+        /// Busca todos os relatórios pelo Guid público do projeto
         /// </summary>
-        public async Task<IEnumerable<Relatorio>> ListarRelatoriosPorProjeto(long idProjeto, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Relatorio>?> ListarRelatoriosPorProjeto(
+            Guid guidProjeto, CancellationToken cancellationToken)
         {
-            return context.Relatorios
-                .Where((relatorio) => relatorio.ProjetoId == idProjeto)
-                .OrderByDescending(r => r.DataHoraExecucao);
+            var projetoId = await ObterIdProjetoDoUsuario(guidProjeto, cancellationToken);
+            if (projetoId is null)
+            {
+                return null;
+            }
+
+            return await context.Relatorios
+                .AsNoTracking()
+                .Where(relatorio => relatorio.ProjetoId == projetoId)
+                .OrderByDescending(r => r.DataHoraExecucao)
+                .ToListAsync(cancellationToken);
         }
 
         /// <summary>
@@ -101,11 +116,11 @@ namespace ArgosApi.Features.Relatorios
         /// <summary>
         /// Enfileira a execução sob demanda do avaliador para o projeto
         /// </summary>
-        public async Task<IniciarAuditoriaResultado> IniciarAuditoria(long idProjeto, CancellationToken cancellationToken)
+        public async Task<IniciarAuditoriaResultado> IniciarAuditoria(Guid guidProjeto, CancellationToken cancellationToken)
         {
             var projeto = await context.Projetos
                 .AsNoTracking()
-                .Where(p => p.Id == idProjeto && p.Usuarios.Any(u => u.Id == currentUser.Id))
+                .Where(p => p.Guid == guidProjeto && p.Usuarios.Any(u => u.Id == currentUser.Id))
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (projeto is null)
@@ -128,7 +143,7 @@ namespace ArgosApi.Features.Relatorios
             }
 
             var atualizados = await context.Projetos
-                .Where(p => p.Id == idProjeto && p.StatusExecucao != StatusExecucao.Executando)
+                .Where(p => p.Id == projeto.Id && p.StatusExecucao != StatusExecucao.Executando)
                 .ExecuteUpdateAsync(
                     s => s
                         .SetProperty(p => p.StatusExecucao, StatusExecucao.Executando)
@@ -142,8 +157,17 @@ namespace ArgosApi.Features.Relatorios
                     "Já existe uma análise em andamento para este projeto.");
             }
 
-            await auditoriaQueue.EnqueueAsync(idProjeto, cancellationToken);
+            await auditoriaQueue.EnqueueAsync(projeto.Id, cancellationToken);
             return new IniciarAuditoriaResultado(StatusCodes.Status202Accepted, null);
+        }
+
+        private async Task<long?> ObterIdProjetoDoUsuario(Guid guidProjeto, CancellationToken cancellationToken)
+        {
+            return await context.Projetos
+                .AsNoTracking()
+                .Where(p => p.Guid == guidProjeto && p.Usuarios.Any(u => u.Id == currentUser.Id))
+                .Select(p => (long?)p.Id)
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
     }
