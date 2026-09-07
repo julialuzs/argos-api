@@ -14,17 +14,17 @@ namespace ArgosApi.Features.Projetos
     ) : ControllerBase
     {
         /// <summary>
-        /// Busca o projeto pelo id informado
+        /// Busca o projeto pelo Guid público informado
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="guid">Identificador público do projeto</param>
         /// <param name="cancellationToken"></param>
         /// <returns>Projeto</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{guid:guid}")]
         [Authorize]
-        public async Task<ActionResult<Projeto>> GetPorId(
-            [FromRoute] long id, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<Projeto>> GetPorGuid(
+            [FromRoute] Guid guid, CancellationToken cancellationToken = default)
         {
-            var response = await projetosService.GetProjetoPorId(id, cancellationToken);
+            var response = await projetosService.GetProjetoPorGuid(guid, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -86,17 +86,17 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Altera informações do projeto 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="guid">Identificador público do projeto</param>
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
-        [HttpPut("{id}")]
+        [HttpPut("{guid:guid}")]
         [Authorize]
         public async Task<ActionResult> Put(
-            [FromRoute] int id,
+            [FromRoute] Guid guid,
             [FromBody] CriacaoProjetoRequest request,
             CancellationToken cancellationToken = default)
         {
-            var response = await projetosService.EditarProjeto(id, request, cancellationToken);
+            var response = await projetosService.EditarProjeto(guid, request, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -107,17 +107,17 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Vincular usuário no projeto 
         /// </summary>
-        /// <param name="id">id do projeto</param>
+        /// <param name="guid">Identificador público do projeto</param>
         /// <param name="idUsuario"></param>
         /// <param name="cancellationToken"></param>
-        [HttpPut("{id}/vincular-usuario/{idUsuario}")]
+        [HttpPut("{guid:guid}/vincular-usuario/{idUsuario}")]
         [Authorize]
         public async Task<ActionResult> VincularUsuarioNoProjeto(
-            [FromRoute] int id,
+            [FromRoute] Guid guid,
             [FromRoute] int idUsuario, 
             CancellationToken cancellationToken = default)
         { 
-            var response = await projetosService.VincularUsuarioNoProjeto(id, idUsuario, cancellationToken);
+            var response = await projetosService.VincularUsuarioNoProjeto(guid, idUsuario, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -126,12 +126,12 @@ namespace ArgosApi.Features.Projetos
         }
 
         /// <summary>
-        /// Remove o projeto pelo id informado
+        /// Remove o projeto pelo Guid informado
         /// </summary>
-        /// <param name="id"></param>
-        [HttpDelete("{id}")]
+        /// <param name="guid">Identificador público do projeto</param>
+        [HttpDelete("{guid:guid}")]
         [Authorize]
-        public ActionResult<string> Delete(int id)
+        public ActionResult<string> Delete(Guid guid)
         {
             return "";
         }

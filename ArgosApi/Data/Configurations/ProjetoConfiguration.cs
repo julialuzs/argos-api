@@ -30,6 +30,9 @@ namespace ArgosApi.Data.Configurations
             builder.Property(p => p.Guid)
                 .IsRequired();
 
+            builder.HasIndex(p => p.Guid)
+                .IsUnique();
+
             builder.Property(p => p.UltimaExecucao)
                 .IsRequired(false);
 

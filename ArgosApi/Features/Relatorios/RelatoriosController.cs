@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ArgosApi.Features.Relatorios
 {
     /// <summary>
-    /// Controller responsável por gerenciar os projetos
+    /// Controller responsável por gerenciar os relatórios
     /// </summary>
     [ApiController]
     [Route("[controller]")]
@@ -17,18 +17,17 @@ namespace ArgosApi.Features.Relatorios
     ) : ControllerBase
     {
         /// <summary>
-        /// Busca o relatorio pelo id informado
+        /// Busca o relatório pelo Guid do projeto e o id do relatório
         /// </summary>
-        /// <param name="idProjeto"></param>
+        /// <param name="guidProjeto">Identificador público do projeto</param>
         /// <param name="idRelatorio"></param>
         /// <param name="cancellationToken"></param>
-        /// <returns>Projeto</returns>
-        [HttpGet("{idProjeto}/{idRelatorio}")]
+        [HttpGet("{guidProjeto:guid}/{idRelatorio:long}")]
         [Authorize]
         public async Task<ActionResult<RelatorioDetalheResponse>> GetPorId(
-            [FromRoute] long idProjeto, [FromRoute] long idRelatorio, CancellationToken cancellationToken = default)
+            [FromRoute] Guid guidProjeto, [FromRoute] long idRelatorio, CancellationToken cancellationToken = default)
         {
-            var response = await relatoriosService.GetRelatorioPorId(idRelatorio, cancellationToken);
+            var response = await relatoriosService.GetRelatorioPorId(guidProjeto, idRelatorio, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -37,17 +36,16 @@ namespace ArgosApi.Features.Relatorios
         }
 
         /// <summary>
-        /// Busca os relatorios pelo id do projeto informado
+        /// Busca os relatórios pelo Guid do projeto informado
         /// </summary>
-        /// <param name="idProjeto"></param>
+        /// <param name="guidProjeto">Identificador público do projeto</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>Projetos</returns>
-        [HttpGet("{idProjeto}/listar")]
+        [HttpGet("{guidProjeto:guid}/listar")]
         [Authorize]
         public async Task<ActionResult<List<Relatorio>>> ListarRelatoriosPorProjeto(
-            [FromRoute] long idProjeto, CancellationToken cancellationToken = default)
+            [FromRoute] Guid guidProjeto, CancellationToken cancellationToken = default)
         {
-            var response = await relatoriosService.ListarRelatoriosPorProjeto(idProjeto, cancellationToken);
+            var response = await relatoriosService.ListarRelatoriosPorProjeto(guidProjeto, cancellationToken);
             if (response == null)
             {
                 return NotFound();
@@ -91,12 +89,12 @@ namespace ArgosApi.Features.Relatorios
         /// <summary>
         /// Dispara a execução sob demanda do avaliador Argos para o projeto
         /// </summary>
-        [HttpPost("{idProjeto}/executar")]
+        [HttpPost("{guidProjeto:guid}/executar")]
         [Authorize]
         public async Task<ActionResult> Executar(
-            [FromRoute] long idProjeto, CancellationToken cancellationToken = default)
+            [FromRoute] Guid guidProjeto, CancellationToken cancellationToken = default)
         {
-            var resultado = await relatoriosService.IniciarAuditoria(idProjeto, cancellationToken);
+            var resultado = await relatoriosService.IniciarAuditoria(guidProjeto, cancellationToken);
             return resultado.StatusCode switch
             {
                 StatusCodes.Status202Accepted => Accepted(),

@@ -24,20 +24,22 @@ namespace ArgosApi.Features.Dashboard
         /// <summary>
         /// Monta os dados do dashboard do projeto. Retorna nulo se o projeto não existir ou não pertencer ao usuário.
         /// </summary>
-        public async Task<DashboardResponse?> GetDashboard(long idProjeto, CancellationToken cancellationToken)
+        public async Task<DashboardResponse?> GetDashboard(Guid guidProjeto, CancellationToken cancellationToken)
         {
-            var projetoExiste = await context.Projetos
+            var projetoId = await context.Projetos
                 .AsNoTracking()
-                .AnyAsync(p => p.Id == idProjeto && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
+                .Where(p => p.Guid == guidProjeto && p.Usuarios.Any(u => u.Id == currentUser.Id))
+                .Select(p => (long?)p.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            if (!projetoExiste)
+            if (projetoId is null)
             {
                 return null;
             }
 
             var series = await context.Relatorios
                 .AsNoTracking()
-                .Where(r => r.ProjetoId == idProjeto)
+                .Where(r => r.ProjetoId == projetoId)
                 .OrderByDescending(r => r.DataHoraExecucao)
                 .Take(LimiteExecucoes)
                 .Select(r => new DashboardSerieExecucaoResponse
@@ -59,7 +61,7 @@ namespace ArgosApi.Features.Dashboard
 
             var ultimoRelatorio = await context.Relatorios
                 .AsNoTracking()
-                .Where(r => r.ProjetoId == idProjeto)
+                .Where(r => r.ProjetoId == projetoId)
                 .OrderByDescending(r => r.DataHoraExecucao)
                 .Select(r => new { r.Json, r.TradutorLibrasIdentificado })
                 .FirstOrDefaultAsync(cancellationToken);

@@ -8,20 +8,20 @@ namespace ArgosApi.Features.Dashboard
     /// </summary>
     [ApiController]
     [Authorize]
-    [Route("projetos/{idProjeto:long}/dashboard")]
+    [Route("projetos/{guidProjeto:guid}/dashboard")]
     public class DashboardController(DashboardService dashboardService) : ControllerBase
     {
         /// <summary>
         /// Busca os dados agregados do dashboard do projeto
         /// </summary>
-        /// <param name="idProjeto">Id do projeto</param>
+        /// <param name="guidProjeto">Identificador público do projeto</param>
         /// <param name="cancellationToken"></param>
         [HttpGet]
         public async Task<ActionResult<DashboardResponse>> Get(
-            [FromRoute] long idProjeto,
+            [FromRoute] Guid guidProjeto,
             CancellationToken cancellationToken = default)
         {
-            var response = await dashboardService.GetDashboard(idProjeto, cancellationToken);
+            var response = await dashboardService.GetDashboard(guidProjeto, cancellationToken);
             if (response is null)
             {
                 return NotFound();

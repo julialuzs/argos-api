@@ -11,13 +11,13 @@ namespace ArgosApi.Features.Projetos
     public class ProjetosService(AppDbContext context, CurrentUser currentUser)
     {
         /// <summary>
-        /// Busca projeto pelo id
+        /// Busca projeto pelo identificador público (Guid)
         /// </summary>
-        public async Task<Projeto?> GetProjetoPorId(long id, CancellationToken cancellationToken)
+        public async Task<Projeto?> GetProjetoPorGuid(Guid guid, CancellationToken cancellationToken)
         {
             return await context.Projetos
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
+                .FirstOrDefaultAsync(p => p.Guid == guid && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
         }
 
         /// <summary>
@@ -69,13 +69,13 @@ namespace ArgosApi.Features.Projetos
         }
 
         /// <summary>
-        /// Busca projeto pelo id e o altera na base de dados
+        /// Busca projeto pelo Guid e o altera na base de dados
         /// </summary>
-        public async Task<Projeto?> EditarProjeto(long id, CriacaoProjetoRequest request, CancellationToken cancellationToken)
+        public async Task<Projeto?> EditarProjeto(Guid guid, CriacaoProjetoRequest request, CancellationToken cancellationToken)
         {
             var entity = await context.Projetos
                 .Include(p => p.Usuarios)
-                .FirstOrDefaultAsync(p => p.Id == id && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
+                .FirstOrDefaultAsync(p => p.Guid == guid && p.Usuarios.Any(u => u.Id == currentUser.Id), cancellationToken);
             if (entity == null)
             {
                 return null;
@@ -92,12 +92,12 @@ namespace ArgosApi.Features.Projetos
         }
 
         /// <summary>
-        /// Busca projeto pelo id e o altera na base de dados
+        /// Busca projeto pelo Guid e vincula o usuário informado
         /// </summary>
         /// TODO: implementar tratamento de erros
-        public async Task<Projeto?> VincularUsuarioNoProjeto(long idProjeto, long idUsuario, CancellationToken cancellationToken)
+        public async Task<Projeto?> VincularUsuarioNoProjeto(Guid guidProjeto, long idUsuario, CancellationToken cancellationToken)
         {
-            var entityProjeto = await context.Projetos.FindAsync([idProjeto], cancellationToken);
+            var entityProjeto = await context.Projetos.FirstOrDefaultAsync(p => p.Guid == guidProjeto, cancellationToken);
             if (entityProjeto == null)
             {
                 return null;
