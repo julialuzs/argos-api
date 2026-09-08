@@ -1,0 +1,60 @@
+name: argos
+
+# Sobe o stack completo (Postgres + API + Angular).
+# Os repositórios argos-api e argos-web precisam estar na mesma pasta pai:
+#   tcc-argos/argos-api
+#   tcc-argos/argos-web
+#
+# Uso:
+#   cp .env.example .env
+#   docker compose up --build
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-argos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-argos}
+      POSTGRES_DB: ${POSTGRES_DB:-argos_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-argos} -d ${POSTGRES_DB:-argos_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: >-
+        Host=db;Port=5432;Database=${POSTGRES_DB:-argos_db};Username=${POSTGRES_USER:-argos};Password=${POSTGRES_PASSWORD:-argos}
+      Jwt__Key: ${JWT_KEY:-altere-esta-chave-jwt-com-pelo-menos-32-chars}
+      Jwt__Issuer: Argos
+      Jwt__Audience: ArgosWeb
+      Cors__Origins__0: http://localhost
+      Cors__Origins__1: http://localhost:4200
+      Cors__Origins__2: http://127.0.0.1
+      Cors__Origins__3: ${CORS_ORIGIN:-http://localhost}
+      ArgosAvaliador__ApiRelatoriosEndpoint: http://127.0.0.1:8080/relatorios
+    shm_size: "1gb"
+    init: true
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ../argos-web
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
