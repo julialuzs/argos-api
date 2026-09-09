@@ -27,7 +27,7 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 ProjetoId = relatorio.ProjetoId,
                 DataHoraExecucao = relatorio.DataHoraExecucao,
                 Pontuacao = relatorio.Pontuacao,
-                TradutorLibrasIdentificado = relatorio.TradutorLibrasIdentificado,
+                VLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
                 HandTalkIdentificado = auditoria?.Summary.AssistiveTechnologies?.HandTalk ?? false,
                 QuantidadeErros = relatorio.QuantidadeErros,
                 QuantidadeAvisos = relatorio.QuantidadeAvisos,

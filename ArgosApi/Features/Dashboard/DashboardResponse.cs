@@ -69,7 +69,7 @@ namespace ArgosApi.Features.Dashboard
         /// <summary>
         /// Indica se o VLibras foi identificado
         /// </summary>
-        public bool TradutorLibrasIdentificado { get; set; }
+        public bool VLibrasIdentificado { get; set; }
 
         /// <summary>
         /// Indica se o Hand Talk foi identificado

@@ -79,9 +79,7 @@ namespace ArgosApi.Features.Dashboard
                 RotasAuditadas = auditoria?.Summary.RoutesAudited
                     ?? auditoria?.Results.Count
                     ?? 0,
-                TradutorLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras
-                    ?? ultimoRelatorio?.TradutorLibrasIdentificado
-                    ?? false,
+                VLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
                 HandTalkIdentificado = auditoria?.Summary.AssistiveTechnologies?.HandTalk ?? false
             };
 
