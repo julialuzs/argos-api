@@ -35,13 +35,15 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: >-
         Host=db;Port=5432;Database=${POSTGRES_DB:-argos_db};Username=${POSTGRES_USER:-argos};Password=${POSTGRES_PASSWORD:-argos}
-      Jwt__Key: ${JWT_KEY:-altere-esta-chave-jwt-com-pelo-menos-32-chars}
+      Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: Argos
       Jwt__Audience: ArgosWeb
       Cors__Origins__0: http://localhost
       Cors__Origins__1: http://localhost:4200
       Cors__Origins__2: http://127.0.0.1
-      Cors__Origins__3: ${CORS_ORIGIN:-http://localhost}
+      Cors__Origins__3: https://argos-acessibilidade.com.br
+      Cors__Origins__4: https://www.argos-acessibilidade.com.br
+      Cors__Origins__5: ${CORS_ORIGIN:-http://localhost}
       ArgosAvaliador__ApiRelatoriosEndpoint: http://127.0.0.1:8080/relatorios
     shm_size: "1gb"
     init: true
@@ -52,6 +54,11 @@ services:
       context: ../argos-web
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - ../argos-web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /var/www/certbot:/var/www/certbot:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - api
     restart: unless-stopped
