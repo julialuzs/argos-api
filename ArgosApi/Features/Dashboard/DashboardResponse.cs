@@ -83,6 +83,11 @@ namespace ArgosApi.Features.Dashboard
     public class DashboardSerieExecucaoResponse
     {
         /// <summary>
+        /// Identificador do relatório da execução
+        /// </summary>
+        public long RelatorioId { get; set; }
+
+        /// <summary>
         /// Data/hora da execução
         /// </summary>
         public DateTime DataHoraExecucao { get; set; }

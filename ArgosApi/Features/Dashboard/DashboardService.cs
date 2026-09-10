@@ -44,6 +44,7 @@ namespace ArgosApi.Features.Dashboard
                 .Take(LimiteExecucoes)
                 .Select(r => new DashboardSerieExecucaoResponse
                 {
+                    RelatorioId = r.Id,
                     DataHoraExecucao = r.DataHoraExecucao,
                     Pontuacao = r.Pontuacao,
                     QuantidadeErros = r.QuantidadeErros,
