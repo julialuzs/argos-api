@@ -13,7 +13,7 @@ namespace ArgosApi.Features.Projetos
         /// <summary>
         /// Descrição do projeto
         /// </summary>
-        public string Descricao { get; set; } = string.Empty;
+        public string? Descricao { get; set; }
 
         /// <summary>
         /// URL base do site a ser auditado
