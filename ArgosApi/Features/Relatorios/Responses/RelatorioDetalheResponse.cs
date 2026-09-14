@@ -87,11 +87,6 @@ namespace ArgosApi.Features.Relatorios.Responses
         public int ProblemasCriticos { get; set; }
 
         /// <summary>
-        /// Critérios eMAG mapeados na rota
-        /// </summary>
-        public List<string> CriteriosEmagMapeados { get; set; } = [];
-
-        /// <summary>
         /// Apontamentos encontrados na rota
         /// </summary>
         public List<ApontamentoResponse> Apontamentos { get; set; } = [];
@@ -131,11 +126,6 @@ namespace ArgosApi.Features.Relatorios.Responses
         /// Descrição do apontamento
         /// </summary>
         public string Descricao { get; set; } = "";
-
-        /// <summary>
-        /// Critérios eMAG relacionados
-        /// </summary>
-        public List<string> CriteriosEmag { get; set; } = [];
 
         /// <summary>
         /// Recomendação de correção

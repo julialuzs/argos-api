@@ -14,7 +14,7 @@ namespace ArgosApi.Features.Dashboard
     public class DashboardService(AppDbContext context, CurrentUser currentUser)
     {
         private const int LimiteExecucoes = 12;
-        private const int LimiteCriteriosEmag = 10;
+        private const int LimiteCriteriosWcag = 10;
 
         private static readonly JsonSerializerOptions JsonOptions = new()
         {
@@ -86,7 +86,7 @@ namespace ArgosApi.Features.Dashboard
 
             response.AchadosPorSeveridade = MapearSeveridades(auditoria);
             response.PontuacaoPorRota = MapearRotas(auditoria);
-            response.CriteriosEmag = MapearCriteriosEmag(auditoria);
+            response.CriteriosWcag = MapearCriteriosWcag(auditoria);
 
             return response;
         }
@@ -157,7 +157,7 @@ namespace ArgosApi.Features.Dashboard
                 .ToList();
         }
 
-        private static List<DashboardEmagResponse> MapearCriteriosEmag(RelatorioAuditoriaJson? auditoria)
+        private static List<DashboardWcagResponse> MapearCriteriosWcag(RelatorioAuditoriaJson? auditoria)
         {
             if (auditoria?.Results is not { Count: > 0 })
             {
@@ -166,18 +166,16 @@ namespace ArgosApi.Features.Dashboard
 
             return auditoria.Results
                 .SelectMany(resultado => resultado.Findings)
-                .SelectMany(finding => finding.EmagCriteria)
-                .Where(criterio => !string.IsNullOrWhiteSpace(criterio)
-                    && !criterio.Contains("manual", StringComparison.OrdinalIgnoreCase))
-                .GroupBy(criterio => criterio.Trim())
-                .Select(grupo => new DashboardEmagResponse
+                .SelectMany(finding => WcagRefHelper.Format(finding.WcagRefs))
+                .GroupBy(criterio => criterio)
+                .Select(grupo => new DashboardWcagResponse
                 {
                     Criterio = grupo.Key,
                     Quantidade = grupo.Count()
                 })
                 .OrderByDescending(item => item.Quantidade)
                 .ThenBy(item => item.Criterio)
-                .Take(LimiteCriteriosEmag)
+                .Take(LimiteCriteriosWcag)
                 .ToList();
         }
     }
