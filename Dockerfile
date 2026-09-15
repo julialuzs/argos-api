@@ -22,7 +22,7 @@ RUN apt-get update \
 WORKDIR /app
 COPY --from=build /app/publish .
 
-ARG ARGOS_AVALIADOR_VERSION=1.3.2
+ARG ARGOS_AVALIADOR_VERSION=1.3.3
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 WORKDIR /app/avaliador
