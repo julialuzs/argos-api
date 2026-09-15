@@ -16,7 +16,7 @@ namespace ArgosApi.Domain.Entities
         /// <summary>
         /// Descrição do projeto
         /// </summary>
-        public string Descricao { get; set; } = "";
+        public string? Descricao { get; set; }
 
         /// <summary>
         /// Identificador público do projeto

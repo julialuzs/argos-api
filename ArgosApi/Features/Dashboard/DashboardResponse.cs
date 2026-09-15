@@ -26,9 +26,9 @@ namespace ArgosApi.Features.Dashboard
         public List<DashboardRotaResponse> PontuacaoPorRota { get; set; } = [];
 
         /// <summary>
-        /// Critérios eMAG mais violados na última execução
+        /// Critérios WCAG mais violados na última execução
         /// </summary>
-        public List<DashboardEmagResponse> CriteriosEmag { get; set; } = [];
+        public List<DashboardWcagResponse> CriteriosWcag { get; set; } = [];
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ namespace ArgosApi.Features.Dashboard
         /// <summary>
         /// Indica se o VLibras foi identificado
         /// </summary>
-        public bool TradutorLibrasIdentificado { get; set; }
+        public bool VLibrasIdentificado { get; set; }
 
         /// <summary>
         /// Indica se o Hand Talk foi identificado
@@ -82,6 +82,11 @@ namespace ArgosApi.Features.Dashboard
     /// </summary>
     public class DashboardSerieExecucaoResponse
     {
+        /// <summary>
+        /// Identificador do relatório da execução
+        /// </summary>
+        public long RelatorioId { get; set; }
+
         /// <summary>
         /// Data/hora da execução
         /// </summary>
@@ -146,12 +151,12 @@ namespace ArgosApi.Features.Dashboard
     }
 
     /// <summary>
-    /// Critério eMAG e quantidade de ocorrências
+    /// Critério WCAG e quantidade de ocorrências
     /// </summary>
-    public class DashboardEmagResponse
+    public class DashboardWcagResponse
     {
         /// <summary>
-        /// Código do critério eMAG
+        /// Código do critério WCAG (ex.: 1.4.3)
         /// </summary>
         public string Criterio { get; set; } = "";
 

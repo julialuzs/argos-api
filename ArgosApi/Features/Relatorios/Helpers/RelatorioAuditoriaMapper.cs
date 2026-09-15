@@ -27,7 +27,7 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 ProjetoId = relatorio.ProjetoId,
                 DataHoraExecucao = relatorio.DataHoraExecucao,
                 Pontuacao = relatorio.Pontuacao,
-                TradutorLibrasIdentificado = relatorio.TradutorLibrasIdentificado,
+                VLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
                 HandTalkIdentificado = auditoria?.Summary.AssistiveTechnologies?.HandTalk ?? false,
                 QuantidadeErros = relatorio.QuantidadeErros,
                 QuantidadeAvisos = relatorio.QuantidadeAvisos,
@@ -53,7 +53,6 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 Caminho = resultado.Path ?? string.Empty,
                 Pontuacao = resultado.Score,
                 ProblemasCriticos = resultado.CriticalIssues,
-                CriteriosEmagMapeados = resultado.EmagMappings,
                 Apontamentos = [
                     .. resultado.Findings.OrderBy(a => a.Severity)
                     .ThenBy(a => a.Title)
@@ -75,10 +74,9 @@ namespace ArgosApi.Features.Relatorios.Helpers
                 Tipo = ObterTipoApontamento(apontamento.Severity),
                 Fonte = apontamento.Source ?? string.Empty,
                 Descricao = apontamento.Description ?? string.Empty,
-                CriteriosEmag = apontamento.EmagCriteria,
                 Recomendacao = apontamento.Recommendation ?? string.Empty,
                 UrlAjuda = apontamento.HelpUrl,
-                ReferenciasWcag = apontamento.WcagRefs,
+                ReferenciasWcag = WcagRefHelper.Format(apontamento.WcagRefs),
                 ElementoHtml = apontamento.HtmlElement,
                 SeletorCss = apontamento.CssSelector,
                 QuantidadeElementos = apontamento.ElementCount

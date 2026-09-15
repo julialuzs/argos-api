@@ -1,0 +1,12 @@
+**/.git
+**/.vs
+**/.idea
+**/bin
+**/obj
+**/out
+**/.env
+**/*.user
+**/*.suo
+**/TestResults
+**/.dockerignore
+README.md

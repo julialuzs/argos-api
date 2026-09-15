@@ -94,7 +94,7 @@ namespace ArgosApi.Features.Relatorios.Requests
         public List<ApontamentoJson> Findings { get; set; } = [];
 
         /// <summary>
-        /// Critérios eMAG mapeados na rota
+        /// Critérios eMAG mapeados na rota (relatórios antigos).
         /// </summary>
         public List<string> EmagMappings { get; set; } = [];
 
@@ -135,7 +135,7 @@ namespace ArgosApi.Features.Relatorios.Requests
         public string? Description { get; set; }
 
         /// <summary>
-        /// Critérios eMAG relacionados
+        /// Critérios eMAG relacionados (relatórios antigos).
         /// </summary>
         public List<string> EmagCriteria { get; set; } = [];
 

@@ -100,7 +100,7 @@ namespace ArgosApi.Features.Relatorios
                 ProjetoId = projeto.Id,
                 DataHoraExecucao = auditoria?.AuditDate ?? DateTime.UtcNow,
                 Pontuacao = auditoria?.Summary?.Score ?? 0,
-                TradutorLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? false,
+                TradutorLibrasIdentificado = auditoria?.Summary.AssistiveTechnologies?.VLibras ?? auditoria?.Summary.AssistiveTechnologies?.HandTalk ?? false,
                 QuantidadeErros = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Serious, SeveridadeEnum.Critical),
                 QuantidadeAvisos = RelatorioAuditoriaCalculator.ContarApontamentosPorSeveridade(auditoria, SeveridadeEnum.Moderate, SeveridadeEnum.Minor)
             };

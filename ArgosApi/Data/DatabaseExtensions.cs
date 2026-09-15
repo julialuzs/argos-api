@@ -22,5 +22,16 @@ namespace ArgosApi.Data
 
             return services;
         }
+
+        /// <summary>
+        /// Aplica migrations pendentes do Entity Framework
+        /// </summary>
+        public static WebApplication ApplyDatabaseMigrations(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.Database.Migrate();
+            return app;
+        }
     }
 }

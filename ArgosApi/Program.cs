@@ -2,8 +2,16 @@ using ArgosApi.Common.Extensions;
 using ArgosApi.Data;
 using ArgosApi.Infrastructure.Authentication;
 using ArgosApi.Infrastructure.Swagger;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddControllers();
 
@@ -14,19 +22,13 @@ builder.Services
     .AddSwaggerDocumentation()
     .AddDatabaseConfiguration(builder.Configuration)
     .AddAuthenticationServices(builder.Configuration)
-    .AddCors(options =>
-    {
-        options.AddPolicy("AllowSpecificOrigin", policy =>
-        {
-            policy.WithOrigins("http://localhost:4200", "https://seusite.com")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-    });
+    .AddCorsPolicy(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseForwardedHeaders();
+app.ApplyDatabaseMigrations();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,14 +37,15 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigin");
+app.UseCors(CorsExtensions.PolicyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.Run(); 

@@ -23,7 +23,14 @@ namespace ArgosApi.Infrastructure.Authentication
 
             var jwtOptions = configuration
                 .GetSection(JwtOptions.SectionName)
-                .Get<JwtOptions>()!;
+                .Get<JwtOptions>()
+                ?? throw new InvalidOperationException("Seção Jwt não configurada.");
+
+            if (string.IsNullOrWhiteSpace(jwtOptions.Key) || jwtOptions.Key.Length < 32)
+            {
+                throw new InvalidOperationException(
+                    "Jwt:Key não configurada ou muito curta. Defina a variável de ambiente Jwt__Key com pelo menos 32 caracteres.");
+            }
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

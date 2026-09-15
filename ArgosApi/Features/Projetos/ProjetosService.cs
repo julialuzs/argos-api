@@ -52,7 +52,7 @@ namespace ArgosApi.Features.Projetos
             var novoProjeto = new Projeto
             {
                 Nome = projeto.Nome,
-                Descricao = projeto.Descricao,
+                Descricao = NormalizarDescricao(projeto.Descricao),
                 UrlBase = projeto.UrlBase?.Trim() ?? "",
                 Rotas = NormalizarRotas(projeto.Rotas),
                 IncluirW3c = projeto.IncluirW3c,
@@ -82,7 +82,7 @@ namespace ArgosApi.Features.Projetos
             }
 
             entity.Nome = request.Nome;
-            entity.Descricao = request.Descricao;
+            entity.Descricao = NormalizarDescricao(request.Descricao);
             entity.UrlBase = request.UrlBase?.Trim() ?? "";
             entity.Rotas = NormalizarRotas(request.Rotas);
             entity.IncluirW3c = request.IncluirW3c;
@@ -113,6 +113,11 @@ namespace ArgosApi.Features.Projetos
             await context.SaveChangesAsync(cancellationToken);
 
             return entityProjeto;
+        }
+
+        private static string? NormalizarDescricao(string? descricao)
+        {
+            return string.IsNullOrWhiteSpace(descricao) ? null : descricao.Trim();
         }
 
         private static string[] NormalizarRotas(string[]? rotas)

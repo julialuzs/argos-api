@@ -25,7 +25,7 @@ namespace ArgosApi.Data.Configurations
 
             builder.Property(p => p.Descricao)
                 .HasMaxLength(250)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.Property(p => p.Guid)
                 .IsRequired();
