@@ -30,5 +30,26 @@ namespace ArgosApi.Features.Authentication
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Redefine a senha de um e-mail já cadastrado
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        [HttpPost("redefinir-senha")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RedefinirSenha(
+            RedefinirSenhaRequest request,
+            CancellationToken cancellationToken)
+        {
+            var atualizada = await authService.RedefinirSenhaAsync(
+                request,
+                cancellationToken);
+
+            if (!atualizada)
+                return NotFound(new { message = "E-mail não cadastrado." });
+
+            return NoContent();
+        }
     }
 }
